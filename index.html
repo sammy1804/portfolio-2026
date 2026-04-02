@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Reenie+Beanie&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400&family=Reenie+Beanie&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css" />
 </head>
@@ -52,6 +52,10 @@
       <span class="dock__chat-label">Chat</span>
       <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2C5.58 2 2 5.13 2 9c0 1.9.82 3.62 2.16 4.9L3 17l3.5-1.4C7.55 16.18 8.74 16.4 10 16.4c4.42 0 8-3.13 8-7.2S14.42 2 10 2z"/></svg>
     </button>
+    <div class="dock__meta">
+      <span class="dock__meta-time" id="dock-time">--:-- --</span>
+      <span class="dock__meta-loc">New Delhi, IN</span>
+    </div>
   </nav>
 
   <!-- ===== BENTO NAV GRID ===== -->
@@ -95,16 +99,9 @@
   <!-- ===== SECTION 1: HERO ===== -->
   <section class="hero" id="hero">
     <div class="hero__sticky">
-      <!-- Dark frame that holds everything -->
       <div class="hero__frame" id="hero-frame">
-        <!-- Time/location meta — top-right -->
-        <div class="hero__meta" id="hero-meta">
-          <span class="hero__meta-time" id="hero-time">--:-- --</span>
-          <span class="hero__meta-location">New Delhi, IN</span>
-        </div>
-        <!-- Hero silhouette image -->
-        <img src="assets/images/hero-silhouette.png" alt="" class="hero__photo" />
-        <!-- Portrait card — appears on scroll -->
+        <span id="hero-time" style="display:none"></span>
+        <div class="hero__photo hero__grid-pattern" id="hero-grid" aria-hidden="true"></div>
         <div class="hero__portrait-wrap" id="hero-portrait-wrap">
           <div class="hero__card-inner">
             <img src="assets/images/samridhi-smile.png" alt="Samridhi Aggarwal" class="hero__portrait" />
@@ -114,31 +111,21 @@
             </div>
           </div>
         </div>
-        <!-- Bottom text — name + tagline -->
         <div class="hero__text">
           <h1 class="hero__title">Samridhi Aggarwal.</h1>
           <p class="hero__tagline">Design for people with experiences<br>they don't forget.</p>
           <span class="hero__year">2025 — Future</span>
         </div>
-        <!-- Scroll indicator -->
         <div class="hero__scroll-indicator">
-          <div class="hero__scroll-mouse">
-            <div class="hero__scroll-wheel"></div>
-          </div>
+          <div class="hero__scroll-mouse"><div class="hero__scroll-wheel"></div></div>
           <span class="hero__scroll-text">scroll</span>
         </div>
       </div>
 
-      <!-- 4 Floating info cards (appear on scroll, positioned around the banner) -->
       <div class="hero__cards" id="hero-cards">
-
-        <!-- 1: Status — top-left (stacked card) -->
+        <!-- 1: Status -->
         <div class="hero__float-card hero__float-card--1 hfc-status-wrap">
-          <!-- Background card — "Let's talk" peeks at bottom -->
-          <div class="hfc-status__bg-card">
-            <span class="hfc-status__cta">Let's talk →</span>
-          </div>
-          <!-- Foreground card — main content -->
+          <div class="hfc-status__bg-card"><span class="hfc-status__cta">Let's talk →</span></div>
           <div class="hfc-status__fg-card">
             <div class="hfc-status__pulse"></div>
             <div class="hfc-status__header">
@@ -156,69 +143,36 @@
             </div>
           </div>
         </div>
-
-        <!-- 2: Craft / Skills — top-right (stacked card) -->
+        <!-- 2: Craft -->
         <div class="hero__float-card hero__float-card--2 hfc-stack-wrap">
-          <div class="hfc-stack__bg-card">
-            <span class="hfc-stack__bg-text">1 yr in & growing →</span>
-          </div>
+          <div class="hfc-stack__bg-card"><span class="hfc-stack__bg-text">1 yr in &amp; growing →</span></div>
           <div class="hfc-stack__fg-card">
             <span class="hfc-stack__label">CRAFT</span>
             <h3 class="hfc-stack__title">What I<br>Do Best.</h3>
             <div class="hfc-craft__skills">
-              <div class="hfc-craft__skill">
-                <span class="hfc-craft__skill-name">Product Design</span>
-                <div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:85%"></div></div>
-              </div>
-              <div class="hfc-craft__skill">
-                <span class="hfc-craft__skill-name">Interaction</span>
-                <div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:80%"></div></div>
-              </div>
-              <div class="hfc-craft__skill">
-                <span class="hfc-craft__skill-name">Web3 / AI</span>
-                <div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:78%"></div></div>
-              </div>
-              <div class="hfc-craft__skill">
-                <span class="hfc-craft__skill-name">Framer / Code</span>
-                <div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:70%"></div></div>
-              </div>
+              <div class="hfc-craft__skill"><span class="hfc-craft__skill-name">Product Design</span><div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:85%"></div></div></div>
+              <div class="hfc-craft__skill"><span class="hfc-craft__skill-name">Interaction</span><div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:80%"></div></div></div>
+              <div class="hfc-craft__skill"><span class="hfc-craft__skill-name">Web3 / AI</span><div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:78%"></div></div></div>
+              <div class="hfc-craft__skill"><span class="hfc-craft__skill-name">Framer / Code</span><div class="hfc-craft__skill-bar"><div class="hfc-craft__skill-fill" style="width:70%"></div></div></div>
             </div>
           </div>
         </div>
-
-        <!-- 3: Numbers / Stats — bottom-right (stacked card) -->
+        <!-- 3: Numbers -->
         <div class="hero__float-card hero__float-card--3 hfc-stack-wrap">
-          <div class="hfc-stack__bg-card">
-            <span class="hfc-stack__bg-text">& counting →</span>
-          </div>
+          <div class="hfc-stack__bg-card"><span class="hfc-stack__bg-text">&amp; counting →</span></div>
           <div class="hfc-stack__fg-card">
             <span class="hfc-stack__label">NUMBERS</span>
             <div class="hfc-numbers__grid">
-              <div class="hfc-numbers__stat">
-                <span class="hfc-numbers__num">10+</span>
-                <span class="hfc-numbers__sub">Projects</span>
-              </div>
-              <div class="hfc-numbers__stat">
-                <span class="hfc-numbers__num">1</span>
-                <span class="hfc-numbers__sub">Year</span>
-              </div>
-              <div class="hfc-numbers__stat">
-                <span class="hfc-numbers__num">5+</span>
-                <span class="hfc-numbers__sub">Industries</span>
-              </div>
-              <div class="hfc-numbers__stat">
-                <span class="hfc-numbers__num">∞</span>
-                <span class="hfc-numbers__sub">Curiosity</span>
-              </div>
+              <div class="hfc-numbers__stat"><span class="hfc-numbers__num">10+</span><span class="hfc-numbers__sub">Projects</span></div>
+              <div class="hfc-numbers__stat"><span class="hfc-numbers__num">1</span><span class="hfc-numbers__sub">Year</span></div>
+              <div class="hfc-numbers__stat"><span class="hfc-numbers__num">5+</span><span class="hfc-numbers__sub">Industries</span></div>
+              <div class="hfc-numbers__stat"><span class="hfc-numbers__num">∞</span><span class="hfc-numbers__sub">Curiosity</span></div>
             </div>
           </div>
         </div>
-
-        <!-- 4: Tools — bottom-left (stacked card) -->
+        <!-- 4: Tools -->
         <div class="hero__float-card hero__float-card--4 hfc-stack-wrap">
-          <div class="hfc-stack__bg-card">
-            <span class="hfc-stack__bg-text">& more →</span>
-          </div>
+          <div class="hfc-stack__bg-card"><span class="hfc-stack__bg-text">&amp; more →</span></div>
           <div class="hfc-stack__fg-card">
             <span class="hfc-stack__label">TOOLS</span>
             <h3 class="hfc-stack__title">Daily<br>Drivers.</h3>
@@ -230,139 +184,143 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
     <div class="hero__spacer"></div>
   </section>
 
-  <!-- ===== SECTION 5: MY WORK ===== -->
-  <section class="work" id="work">
-    <!-- Big background text sticky container -->
-    <div class="work__bg-container">
-      <div class="work__bg-text">MY WORK</div>
+  <!-- ===== SECTION 2: HELLO — INTRO ===== -->
+  <section class="nh" id="intro">
+
+    <!-- Atmospheric role strip -->
+    <div class="nh-ticker" aria-hidden="true">
+      <div class="nh-ticker__track">
+        <!-- Sequence A -->
+        <span class="nh-ticker__item">Brand designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">Visual designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">Product designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">UI designer<span class="nh-ticker__sep"></span></span>
+        <!-- Sequence B — exact duplicate for seamless loop -->
+        <span class="nh-ticker__item">Brand designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">Visual designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">Product designer<span class="nh-ticker__sep"></span></span>
+        <span class="nh-ticker__item">UI designer<span class="nh-ticker__sep"></span></span>
+      </div>
     </div>
 
-    <div class="work__container">
-      <!-- Left Sticky Sidebar -->
-      <div class="work__sidebar-left">
-        <p class="work__sidebar-tag" id="work-sidebar-tags">Product Design &bull; Web3 &bull; Brand And Visuals</p>
-        <p class="work__sidebar-desc" id="work-sidebar-desc">Where trust is built through play, not explanation</p>
-        <a href="#" id="work-view-btn" class="hobbies__cta work__cta-btn" target="_blank" rel="noopener">View Project</a>
-      </div>
+    <!-- Editorial text block -->
+    <div class="nh-content">
+      <div class="nh-block">
 
-      <!-- Center Scrolling Cards -->
-      <div class="work__cards-column">
+        <!-- Identity headline -->
+        <h2 class="nh-title">
+          <span class="nh-title__row">HELLO</span>
+          <span class="nh-title__row">I'M SAMRIDHI</span>
+        </h2>
 
-        <!-- EXPERIMENTS — first -->
-        <div class="work__category-label"
-          style="padding: 2rem 0; font-family: var(--font-display); font-size: 2.5rem; color: var(--accent-red); letter-spacing: 2px;">
-          Experiments</div>
+        <!-- Supporting copy -->
+        <p class="nh-bio">I'm a product designer with an architectural mindset, shaping interfaces through spatial thinking, systems logic, and narrative structure.</p>
 
-        <!-- ARCHADE -->
-        <div class="work__card" data-tags="Experimental Build &bull; AI Assisted Interface System"
-          data-desc="Curiosity modeled into an interactive experience"
-          data-right-text="A vibe-coded architectural experiment acting as a playground outside serious product work."
-          data-title="Archade" data-title-dark="false"
-          data-url="https://aistudio.google.com/apps/drive/1Xv9MRrVhH7ZQVUxRe6zZnqs9Dia5KXpv?fullscreenApplet=true&showPreview=true&showAssistant=true"
-          data-url-external="true"
-          onclick="window.open('https://aistudio.google.com/apps/drive/1Xv9MRrVhH7ZQVUxRe6zZnqs9Dia5KXpv?fullscreenApplet=true&showPreview=true&showAssistant=true', '_blank')"
-          style="cursor: pointer;">
-          <img src="assets/images/archade-home.png" alt="Archade Vibe Code" loading="lazy"
-            style="width: 100%; height: 400px; object-fit: cover; border-radius: 12px;" />
-        </div>
-
-        <!-- AI ASSETS -->
-        <div class="work__card" data-tags="Concept Acceleration &bull; Visual Prototyping"
-          data-desc="AI as a creative multiplier"
-          data-right-text="Curated cosmos of 3D forms, motion drafts, and asset generation demonstrating speed and premium output."
-          data-title="AI Assets" data-title-dark="true"
-          data-url="ai-assets.html"
-          onclick="window.location.href='ai-assets.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/ai-assets-home.png" alt="AI Assets Cosmos" loading="lazy"
-            style="width: 100%; height: 400px; object-fit: cover; border-radius: 12px;" />
-        </div>
-
-        <!-- SELECTED WORK -->
-        <div class="work__category-label"
-          style="padding: 4rem 0 2rem; border-top: 1px solid rgba(0,0,0,0.1); font-family: var(--font-display); font-size: 2.5rem; color: #111; letter-spacing: 2px;">
-          Selected Work</div>
-
-        <!-- BANJARO -->
-        <div class="work__card" data-tags="End-to-end Ownership &bull; Product Thinking &bull; Emotional Narrative"
-          data-desc="Solving real travel problems, not just a cool idea"
-          data-right-text="From logo and branding straight through to app UX and design systems."
-          data-title="Banjaro App" data-title-dark="false"
-          data-url="banjaro.html"
-          onclick="window.location.href='banjaro.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/banjaro.png" alt="Banjaro" loading="lazy" />
-        </div>
-
-        <!-- INTRACT -->
-        <div class="work__card" data-tags="Rebranding &bull; Product Design &bull; Web3 Gamification"
-          data-desc="The credibility engine in action"
-          data-right-text="Contributed to rebranding system and gamified UX flows for quest-driven Web3 engagement."
-          data-title="Intract" data-title-dark="false"
-          data-url="intract.html"
-          onclick="window.location.href='intract.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/intract.png" alt="Intract" loading="lazy" />
-        </div>
-
-        <!-- Z42 LABS -->
-        <div class="work__card" data-tags="Structured Thinking &bull; System Mapping &bull; Service Architecture"
-          data-desc="High-end AI positioning"
-          data-right-text="Pioneering new interfaces for artificial intelligence through deep design maturity."
-          data-title="Z42 Labs" data-title-dark="false"
-          data-url="z42.html"
-          onclick="window.location.href='z42.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/z42labs.png" alt="Z42 Labs" loading="lazy" />
-        </div>
-
-        <!-- PROFESSIONAL WORK -->
-        <div class="work__category-label"
-          style="padding: 4rem 0 2rem; border-top: 1px solid rgba(0,0,0,0.1); font-family: var(--font-display); font-size: 2.5rem; color: #888; letter-spacing: 2px;">
-          Professional Work</div>
-
-        <!-- SARVOMA -->
-        <div class="work__card" data-tags="Logo &bull; Branding &bull; Market Positioning"
-          data-desc="Brand strategy logic and tone decisions"
-          data-right-text="Establishing identity that works perfectly with their market positioning."
-          data-title="Sarvoma" data-title-dark="true"
-          data-url="sarvoma.html"
-          onclick="window.location.href='sarvoma.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/sarvoma-home.png" alt="Sarvoma" loading="lazy"
-            style="width: 100%; height: 400px; object-fit: cover; border-radius: 12px; object-position: top;" />
-        </div>
-
-        <!-- PROMENA -->
-        <div class="work__card" data-tags="Enterprise Dashboards &bull; Websites &bull; Apps"
-          data-desc="Designing Across Domains – Promena"
-          data-right-text="Solo designer handling data density, role complexity, and diverse tonal shifts across B2B SaaS and B2C interfaces."
-          data-title="Promena" data-title-dark="false"
-          data-url="promena.html"
-          onclick="window.location.href='promena.html'"
-          style="cursor: pointer;">
-          <img src="assets/images/promena-banner.png" alt="Promena" loading="lazy"
-            style="width: 100%; height: 400px; object-fit: cover; border-radius: 12px;" />
-        </div>
+        <p class="nh-quote" id="nh-quote-inline">I design experiences across space</p>
 
       </div>
-
-      <!-- Right Sticky Sidebar -->
-      <div class="work__sidebar-right">
-        <div class="work__sidebar-right-content">
-          <p class="work__sidebar-note" id="work-sidebar-note">Designed to encourage outdoor activity through play.</p>
-          <h2 class="work__sidebar-title" id="work-sidebar-title">Banjaro</h2>
-        </div>
-      </div>
-
     </div>
+
   </section>
+
+  <!-- ===== SECTION 5: MY WORK — CARDENAS SCROLL ===== -->
+  <div class="wf-scroll-container" id="work">
+    <section class="wf-section">
+      <!-- The 1.5× scaled canvas — ALL cards live here -->
+      <div class="wf-scene" id="wf-scene">
+
+        <!-- Card A1: Z42 — left edge, large, slight tilt left -->
+        <article class="wf-card wf-card--lg"
+                 data-speed="0.80"
+                 style="left:2%;--wf-y:5%;--wf-rot:-3deg">
+          <a href="z42.html" class="wf-card__inner">
+            <img src="assets/images/project-5.jpg" alt="Z42 Labs" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">Z42 Labs</span>
+              <span class="wf-card__tag">AI · Brand System</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Card A2: Intract — center, medium -->
+        <article class="wf-card wf-card--md"
+                 data-speed="1.00"
+                 style="left:32%;--wf-y:12%;--wf-rot:1.5deg">
+          <a href="intract.html" class="wf-card__inner">
+            <img src="assets/images/project-7.jpg" alt="Intract" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">Intract</span>
+              <span class="wf-card__tag">Web3 · Gamification</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Card A3: Banjaro — right, large, overlaps A2 edge -->
+        <article class="wf-card wf-card--lg"
+                 data-speed="0.70"
+                 style="left:68%;--wf-y:2%;--wf-rot:2.5deg">
+          <a href="banjaro.html" class="wf-card__inner">
+            <img src="assets/images/project-4.jpg" alt="Banjaro" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">Banjaro</span>
+              <span class="wf-card__tag">Product · Travel App</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- ── ROW B (start in lower viewport — enter second) ──── -->
+
+        <!-- Card B1: Sarvoma — left, medium -->
+        <article class="wf-card wf-card--md"
+                 data-speed="0.90"
+                 style="left:5%;--wf-y:62%;--wf-rot:-2deg">
+          <a href="sarvoma.html" class="wf-card__inner">
+            <div class="wf-card__badge">COMING SOON</div>
+            <img src="assets/images/project-3.jpg" alt="Sarvoma" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">Sarvoma</span>
+              <span class="wf-card__tag">Logo · Brand · Identity</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Card B2: AI Assets — center-right, small -->
+        <article class="wf-card wf-card--sm"
+                 data-speed="1.10"
+                 style="left:38%;--wf-y:70%;--wf-rot:-1deg">
+          <a href="ai-assets.html" class="wf-card__inner">
+            <img src="assets/images/project-2.jpg" alt="AI Assets" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">AI Assets</span>
+              <span class="wf-card__tag">3D · Motion · Concept</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Card B3: Archade — far right, mostly in frame -->
+        <article class="wf-card wf-card--md"
+                 data-speed="0.75"
+                 style="left:72%;--wf-y:58%;--wf-rot:3.5deg">
+          <a href="https://aistudio.google.com/apps/drive/1Xv9MRrVhH7ZQVUxRe6zZnqs9Dia5KXpv?fullscreenApplet=true" target="_blank" class="wf-card__inner">
+            <img src="assets/images/project-1.jpg" alt="Archade" loading="lazy">
+            <div class="wf-card__overlay">
+              <span class="wf-card__name">Archade</span>
+              <span class="wf-card__tag">Experimental Build</span>
+            </div>
+          </a>
+        </article>
+
+      </div><!-- /.wf-scene -->
+
+
+
+    </section>
+  </div><!-- /.wf-scroll-container -->
 
   <!-- ===== SECTION 7: MY JOURNEY ===== -->
   <section class="journey" id="journey">
@@ -560,8 +518,8 @@
       <div class="footer-game__header">
         <div>
           <span class="footer-game__tag">/ MINI GAME /</span>
-          <h3 class="footer-game__title">Take a Break</h3>
-          <p class="footer-game__desc">Catch the red shapes before they disappear.</p>
+          <h3 class="footer-game__title">Flappy S</h3>
+          <p class="footer-game__desc">Dodge the pipes. Space · click · tap to flap.</p>
         </div>
         <div class="footer-game__meta">
           <div class="footer-game__stat">
@@ -569,8 +527,8 @@
             <span class="footer-game__stat-val" id="fg-score">0</span>
           </div>
           <div class="footer-game__stat">
-            <span class="footer-game__stat-label">TIME</span>
-            <span class="footer-game__stat-val" id="fg-timer">0:30</span>
+            <span class="footer-game__stat-label">SPEED</span>
+            <span class="footer-game__stat-val" id="fg-timer">×1</span>
           </div>
           <div class="footer-game__stat">
             <span class="footer-game__stat-label">BEST</span>
@@ -582,9 +540,9 @@
       <div class="footer-game__arena">
         <canvas id="fg-canvas"></canvas>
         <div class="footer-game__overlay" id="fg-overlay">
-          <p class="footer-game__ol-score" id="fg-ol-score">30 sec</p>
+          <p class="footer-game__ol-score" id="fg-ol-score">FLAP</p>
           <button class="footer-game__play-btn" id="fg-play-btn">Play →</button>
-          <p class="footer-game__ol-hint">Click shapes before they vanish</p>
+          <p class="footer-game__ol-hint" id="fg-ol-hint">Space · click · tap to flap</p>
         </div>
       </div>
     </div>
@@ -624,6 +582,11 @@
         <button id="chatbot-send" class="chatbot-send-btn">→</button>
       </div>
     </div>
+  </div>
+
+  <!-- Fixed CTA — fades in later with the cards -->
+  <div class="wf-cta" id="wf-cta">
+    <a href="mailto:samridhi28.19@gmail.com" class="wf-cta__pill">CONTACT NOW</a>
   </div>
 
   <script type="module" src="js/main.js"></script>

@@ -387,77 +387,48 @@ body.theme-dark {
 
 .cs-btn-red-brackets {
     position: relative;
-    background: #fff;
-    color: #000;
-    padding: 1.25rem 3.5rem;
+    padding: 1.1rem 3.5rem;
     font-family: var(--font-main);
     font-weight: 500;
     text-decoration: none;
-    border: none;
+    border: 2px solid var(--cs-accent);
+    color: var(--cs-accent);
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1rem;
     letter-spacing: 0.2px;
-    transition: transform 0.3s;
+    background: transparent;
+    overflow: hidden;
+    transition: color 0.4s var(--ease-out);
+    z-index: 1;
+}
+
+.cs-btn-red-brackets::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cs-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out);
+    z-index: -1;
+}
+
+.cs-btn-red-brackets:hover::before {
+    transform: scaleX(1);
 }
 
 .cs-btn-red-brackets:hover {
-    transform: scale(1.02);
-}
-
-.cs-btn-inner-brackets {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.cs-btn-red-brackets::before,
-.cs-btn-red-brackets::after,
-.cs-btn-inner-brackets::before,
-.cs-btn-inner-brackets::after {
-    content: '';
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border: 6px solid #ff0000;
-    /* Thicker solid red matching reference */
-}
-
-/* Top brackets */
-.cs-btn-red-brackets::before {
-    top: -6px;
-    left: -6px;
-    border-right: none;
-    border-bottom: none;
-}
-
-.cs-btn-red-brackets::after {
-    top: -6px;
-    right: -6px;
-    border-left: none;
-    border-bottom: none;
-}
-
-/* Bottom brackets */
-.cs-btn-inner-brackets::before {
-    bottom: -6px;
-    left: -6px;
-    border-right: none;
-    border-top: none;
-}
-
-.cs-btn-inner-brackets::after {
-    bottom: -6px;
-    right: -6px;
-    border-left: none;
-    border-top: none;
+    color: #fff;
+    transform: none;
 }
 
 .cs-btn-outline {
     border: 2px solid #fff;
     color: #fff;
-    padding: 1.25rem 3.5rem;
+    padding: 1.1rem 3.5rem;
     font-family: var(--font-main);
     font-weight: 500;
     text-decoration: none;
@@ -466,12 +437,35 @@ body.theme-dark {
     justify-content: center;
     font-size: 1rem;
     letter-spacing: 0.2px;
+    border-radius: 12px;
     transition: background 0.3s, color 0.3s;
 }
 
 .cs-btn-outline:hover {
     background: #fff;
     color: #000;
+}
+
+.cs-btn-white {
+    background: #ffffff;
+    color: #111111;
+    border: 2px solid #ffffff;
+    padding: 1.1rem 3.5rem;
+    font-family: var(--font-main);
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+    border-radius: 12px;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.cs-btn-white:hover {
+    background: transparent;
+    color: #ffffff;
 }
 
 /* ---- Responsive ---- */

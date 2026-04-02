@@ -78,6 +78,11 @@
   box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -205,7 +210,7 @@ img {
   width: min(55vw, 400px);
   height: 24px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 100px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -213,7 +218,7 @@ img {
   height: 100%;
   width: 0%;
   background: rgba(255, 255, 255, 0.4);
-  border-radius: 100px;
+  border-radius: 12px;
   will-change: width;
 }
 
@@ -316,12 +321,43 @@ img {
   font-family: var(--font-body);
 }
 
+.dock__meta {
+  height: 42px;
+  padding: 0 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1px;
+}
+
+.dock__meta-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1;
+  letter-spacing: 0.3px;
+}
+
+.dock__meta-loc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.38);
+  line-height: 1;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 /* ================================ */
 /*   BENTO NAV GRID                 */
 /* ================================ */
 .bento-nav {
   position: fixed;
-  bottom: 4.5rem;
+  bottom: calc(1.2rem + 50px + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(12px);
   z-index: 9989;
@@ -358,7 +394,7 @@ img {
 .bento-nav__card {
   background: var(--accent-red);
   border-radius: 14px;
-  padding: 0.9rem 1rem;
+  padding: 0.6rem 0.6rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -425,17 +461,21 @@ img {
 /* ================================ */
 .hero {
   position: relative;
+  width: 100%;
   height: 300vh;
+  margin: 0;
+  padding: 0;
 }
 
 .hero__sticky {
   position: sticky;
   top: 0;
+  width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* ---------- DARK FRAME ---------- */
@@ -604,7 +644,7 @@ img {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
   padding: 4px 10px;
-  border-radius: 100px;
+  border-radius: 12px;
   letter-spacing: 0.3px;
 }
 
@@ -680,15 +720,13 @@ img {
   inset: 0;
   z-index: 5;
   opacity: 0;
+  pointer-events: none;
   will-change: opacity;
   display: flex;
   overflow: hidden;
-
-  padding: 10px;
+  padding: 0;
   border-radius: 24px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+  background: transparent;
 }
 
 .hero__portrait-wrap::before {
@@ -854,17 +892,7 @@ img {
 
 /* Title text at bottom of frame */
 .hero__text {
-  position: absolute;
-  bottom: 3rem;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  will-change: opacity;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
+  display: none;
 }
 
 .hero__title {
@@ -989,7 +1017,7 @@ img {
   width: 22%;
   max-width: 240px;
   top: 6%;
-  left: 3%;
+  left: 24px;
 }
 
 /* Card 2: Craft — top-right */
@@ -997,7 +1025,7 @@ img {
   width: 20%;
   max-width: 220px;
   top: 6%;
-  right: 4%;
+  right: 24px;
 }
 
 /* Card 3: Numbers — bottom-right */
@@ -1005,7 +1033,7 @@ img {
   width: 21%;
   max-width: 232px;
   bottom: 6%;
-  right: 3%;
+  right: 24px;
 }
 
 /* Card 4: Tools — bottom-left */
@@ -1013,7 +1041,7 @@ img {
   width: 20%;
   max-width: 220px;
   bottom: 6%;
-  left: 3%;
+  left: 24px;
 }
 
 /* ================================ */
@@ -1164,7 +1192,7 @@ img {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.06);
   padding: 3px 8px;
-  border-radius: 100px;
+  border-radius: 12px;
   letter-spacing: 0.3px;
 }
 
@@ -1275,14 +1303,14 @@ img {
   width: 100%;
   height: 3px;
   background: rgba(255, 255, 255, 0.06);
-  border-radius: 100px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .hfc-craft__skill-fill {
   height: 100%;
   background: var(--accent-red);
-  border-radius: 100px;
+  border-radius: 12px;
 }
 
 /* ── Numbers Card: Stats Grid (redesigned) ── */
@@ -1419,14 +1447,14 @@ img {
   width: 100%;
   height: 2.5px;
   background: rgba(255,255,255,0.1);
-  border-radius: 100px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .hfc__bar-fill {
   height: 100%;
   background: var(--accent-red);
-  border-radius: 100px;
+  border-radius: 12px;
 }
 
 .hfc__note {
@@ -1508,7 +1536,7 @@ img {
   z-index: 9000;
   height: 52px;
   width: 52px;
-  border-radius: 100px;
+  border-radius: 12px;
   background: var(--accent-red);
   color: #fff;
   display: flex;
@@ -1571,26 +1599,28 @@ img {
 /* ================================ */
 .chatbot-overlay {
   position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 2rem;
+  bottom: calc(1.2rem + 50px + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 9989;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s var(--ease-out), visibility 0.3s;
+  pointer-events: none;
+  transition:
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.3s;
 }
 
 .chatbot-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
 }
 
 .chatbot-modal {
-  width: 360px;
+  width: 100%;
   max-height: 560px;
   background: #111111;
   border-radius: 20px;
@@ -1598,13 +1628,6 @@ img {
   display: flex;
   flex-direction: column;
   box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
-  transform: translateY(20px);
-  transform-origin: bottom right;
-  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out), border-radius 0.35s var(--ease-out);
-}
-
-.chatbot-overlay.active .chatbot-modal {
-  transform: translateY(0);
 }
 
 .chatbot-header {
@@ -1783,7 +1806,7 @@ img {
   flex: 1;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 100px;
+  border-radius: 12px;
   padding: 0.5rem 0.9rem;
   font-size: 0.8rem;
   color: var(--text-white);
@@ -1837,16 +1860,7 @@ img {
 
 /* ── Scroll indicator (mouse + text, centered) ── */
 .hero__scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  will-change: opacity;
+  display: none;
 }
 
 .hero__scroll-mouse {
@@ -2393,7 +2407,7 @@ img {
 
 .work__sidebar-title {
   font-family: var(--font-body);
-  font-size: clamp(3rem, 6vw, 6rem);
+  font-size: 82px;
   color: var(--text-dark);
   line-height: 0.8;
   letter-spacing: -2px;
@@ -2576,7 +2590,7 @@ img {
 /* ================================ */
 .journey {
   background: var(--bg-cream);
-  padding: 10vh 0 0 0;
+  padding: 5vh 0 0 5vh;
   /* Space so it's not glued to the previous section */
   min-height: 100vh;
   position: relative;
@@ -2586,7 +2600,7 @@ img {
   display: flex;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: var(--space-3xl) var(--gutter);
+  padding: var(--gutter) var(--gutter) var(--space-3xl) calc(var(--gutter) * 2);
   position: relative;
   z-index: 2;
   /* Content sits above floating images */
@@ -3132,7 +3146,7 @@ img {
   background: var(--accent-red);
   border: none;
   padding: 0.75rem 2.2rem;
-  border-radius: 100px;
+  border-radius: 12px;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
@@ -3198,7 +3212,7 @@ img {
   padding: 1rem 3rem;
   border: 2px solid var(--accent-red);
   color: var(--accent-red);
-  border-radius: 100px;
+  border-radius: 12px;
   transition: all 0.4s var(--ease-out);
   position: relative;
   overflow: hidden;
@@ -3468,9 +3482,7 @@ img {
     right: 1.5rem;
   }
 
-  .hero__float-card {
-    display: none;
-  }
+  /* float cards handled below via horizontal row — not hidden */
 
   .hero__spacer {
     height: 100vh;
@@ -3798,4 +3810,769 @@ img {
   .hobbies__flip-face h3 {
     font-size: clamp(1.5rem, 5.5vw, 2.2rem);
   }
+}
+/* Grid pattern — full-frame modular identity grid */
+.hero__grid-pattern {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none;
+  /* 9-col × 4-row grid */
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1px;
+  background: #2a2a2a;
+  padding: 0;
+  pointer-events: none;
+}
+
+.hero__grid-pattern .grid-cell {
+  background: #141414;
+  position: relative;
+  overflow: hidden;
+  pointer-events: auto;
+  border-radius: 3px;
+  transition: background 160ms ease;
+}
+
+/* All tiles identical on load — grey only on hover */
+.hero__grid-pattern .grid-cell:hover {
+  background: #424242;
+}
+
+/* Label base — anchors top-left */
+.hero__grid-pattern .grid-cell__label {
+  display: block;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: auto;
+  color: rgba(255, 255, 255, 0.82);
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+  line-height: 1.35;
+}
+
+/* Bottom-anchored variant (DETAIL, CLARITY) */
+.hero__grid-pattern .grid-cell__label--b {
+  top: auto;
+  bottom: 8px;
+}
+
+/* Large: PRODUCT, DESIGNER, DETAIL */
+.hero__grid-pattern .grid-cell__label--lg {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+/* Medium: phrase tiles */
+.hero__grid-pattern .grid-cell__label--md {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .hero__grid-pattern {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .hero__grid-pattern .grid-cell__label--lg {
+    font-size: clamp(0.45rem, 1.5vw, 0.65rem);
+  }
+  .hero__grid-pattern .grid-cell__label--md {
+    font-size: clamp(0.32rem, 0.9vw, 0.45rem);
+  }
+}
+
+/* ================================================ */
+/*  COMPREHENSIVE RESPONSIVE ADDITIONS              */
+/* ================================================ */
+
+/* ── Tablet (≤1024px) ── */
+@media (max-width: 1024px) {
+  /* Dock — safe on tablet */
+  .dock {
+    max-width: calc(100vw - 3rem);
+  }
+
+  /* Bento nav — match dock width naturally */
+  .bento-nav__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Hero grid — tighter inset */
+  .hero__grid-pattern {
+    top: 12px;
+    left: 12px !important;
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+
+  /* ── Dock ── */
+  .dock {
+    max-width: calc(100vw - 2rem);
+    bottom: 0.8rem;
+    gap: 3px;
+    padding: 3px;
+  }
+  .dock__logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 1.4rem;
+  }
+  .dock__toggle,
+  .dock__chat {
+    height: 38px;
+    padding: 0 0.75rem;
+    font-size: 0.72rem;
+    border-radius: 10px;
+  }
+
+  /* ── Bento nav — near full-width bottom sheet ── */
+  .bento-nav {
+    width: calc(100vw - 2rem) !important;
+    left: 1rem !important;
+    transform: translateY(14px);
+    bottom: 4rem;
+  }
+  .bento-nav.is-open {
+    transform: translateY(0);
+  }
+  .bento-nav__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-nav__card--large,
+  .bento-nav__card--wide {
+    grid-column: span 2;
+  }
+  .bento-nav__card--icon {
+    grid-column: span 1;
+  }
+  .bento-nav__card {
+    min-height: 64px;
+    padding: 0.8rem;
+  }
+
+  /* ── Hero grid inset ── */
+  .hero__grid-pattern {
+    top: 8px;
+    left: 8px !important;
+    right: 8px;
+    bottom: 8px;
+    gap: 1px;
+  }
+
+  /* ── Hero portrait card — landscape on mobile ── */
+  .hero__portrait-wrap {
+    border-radius: 18px;
+  }
+  .hero__card-inner {
+    border-radius: 10px;
+  }
+  .hero__portrait {
+    object-position: center 15%;
+  }
+
+  /* ── Float cards — horizontal scrollable row at bottom ── */
+  .hero__float-card {
+    display: block !important;
+    position: relative !important;
+    width: 170px !important;
+    max-width: 170px !important;
+    flex-shrink: 0;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    border-radius: 18px;
+    height: 130px;
+    overflow: hidden;
+  }
+  .hero__cards {
+    position: absolute;
+    inset: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 12px 16px;
+    padding-bottom: 16px;
+    z-index: 6;
+    pointer-events: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hero__cards::-webkit-scrollbar { display: none; }
+
+  /* Clip float card inner content to fixed height */
+  .hfc-status-wrap,
+  .hfc-stack-wrap {
+    height: 130px;
+  }
+
+  /* ── About section ── */
+  .about__content {
+    padding: 2rem 1.5rem;
+  }
+  .about__bio {
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  /* ── Work section ── */
+  .work__bg-text {
+    display: none;
+  }
+
+  /* ── Skills section ── */
+  .skills {
+    min-height: 80vh;
+  }
+
+  /* ── Footer game ── */
+  #fg-canvas {
+    height: 180px;
+  }
+  .footer-game {
+    padding: 2.5rem 1.2rem 0;
+  }
+  .footer-game__title {
+    font-size: 1.8rem;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 3rem 1.2rem;
+  }
+  .footer__links a {
+    font-size: 0.82rem;
+  }
+}
+
+/* ── Small Phone (≤480px) ── */
+@media (max-width: 480px) {
+
+  /* ── Dock — minimal padding ── */
+  .dock {
+    bottom: 0.6rem;
+    padding: 3px;
+    gap: 2px;
+  }
+  .dock__toggle,
+  .dock__chat {
+    padding: 0 0.6rem;
+    font-size: 0.68rem;
+  }
+  .dock__logo {
+    width: 34px;
+    height: 34px;
+    font-size: 1.2rem;
+  }
+
+  /* ── Bento nav — single column ── */
+  .bento-nav {
+    width: calc(100vw - 1.5rem) !important;
+    left: 0.75rem !important;
+  }
+  .bento-nav__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bento-nav__card--large,
+  .bento-nav__card--wide {
+    grid-column: span 2;
+  }
+  .bento-nav__card {
+    min-height: 56px;
+    padding: 0.7rem;
+  }
+  .bento-nav__label {
+    font-size: 0.75rem;
+  }
+  .bento-nav__hint {
+    font-size: 0.5rem;
+  }
+
+  /* ── Hero grid — minimal inset, 5 cols ── */
+  .hero__grid-pattern {
+    top: 6px;
+    left: 6px !important;
+    right: 6px;
+    bottom: 6px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .hero__grid-pattern .grid-cell__label--lg {
+    font-size: clamp(0.38rem, 1.4vw, 0.55rem);
+  }
+  .hero__grid-pattern .grid-cell__label--md {
+    font-size: clamp(0.28rem, 0.8vw, 0.38rem);
+  }
+  .hero__grid-pattern .grid-cell__label {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+  }
+  .hero__grid-pattern .grid-cell__label--b {
+    top: auto;
+    bottom: 5px;
+  }
+
+  /* ── Footer game ── */
+  #fg-canvas {
+    height: 140px;
+  }
+  .footer-game__title {
+    font-size: 1.5rem;
+  }
+  .footer-game__stat-val {
+    font-size: 1.4rem;
+  }
+
+  /* ── Journey ── */
+  .journey__block-title {
+    font-size: 0.95rem;
+  }
+
+  /* ── Work ── */
+  .work {
+    padding: 3rem 1rem;
+  }
+  .work__cards-column {
+    gap: 1.5rem;
+  }
+}
+
+/* ============================================================
+   WORK SECTION — CARDENAS SCROLL  (.wf-*)
+   Viewport: 1× normal  |  Card canvas: 1.5× scaled
+   On scroll → cards travel upward (each at its own speed)
+   ============================================================ */
+
+/* ── Scroll travel: 120vh extra beyond the sticky pinned frame ── */
+.wf-scroll-container {
+  height: 220vh;   /* 1.2 extra viewports — cards travel but don't linger */
+}
+
+/* ── Sticky section: locks viewport at 100vh ────────────── */
+.wf-section {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: #0d0d0d;  /* matches .nh intro for seamless blend */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.wf-headline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.wf-headline__title {
+  font-family: var(--font-body);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  text-transform: none; /* Changed to sentence case for a sophisticated look */
+  letter-spacing: normal;
+}
+
+/* Word reveal - CDG style (pure opacity, no blur)
+   JS drives --wf-reveal 0 to 1. Dim grey to sharp white.
+   No blur - matches CDG exactly. */
+.wf-word {
+  display: inline-block;
+  opacity: calc(0.12 + var(--wf-reveal, 0) * 0.88);
+  transition: opacity 0.06s linear;
+  will-change: opacity;
+}
+
+.wf-word:first-child {
+  opacity: calc(0.14 + var(--wf-reveal, 0) * 0.86);
+}
+
+/* ── Card canvas: no external scale — cards sized for viewport ── */
+.wf-scene {
+  position: absolute;
+  inset: 0;
+  /* No scale: cards are fully inside the viewport frame */
+}
+
+/* ── Individual card ────────────────────────────────────────  */
+.wf-card {
+  position: absolute;
+  left: var(--wf-x, 0);
+  /* top is computed by JS from --wf-y but we set initial here */
+  top: var(--wf-y, 0);
+  transform: rotate(var(--wf-rot, 0deg)) translateY(0px);
+  will-change: transform;
+  z-index: 3;
+  opacity: 1 !important; /* ensure Intract and others are 100% opaque as requested */
+}
+
+/* ── Card inner ─────────────────────────────────────────────── */
+.wf-card__inner {
+  display: block;
+  position: relative;
+  border-radius: 6px;   /* reduced corner radius */
+  overflow: hidden;
+  text-decoration: none;
+  background: #1a1a1a;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.52),
+    0 4px  16px rgba(0,0,0,0.28);
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+
+.wf-card__inner:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow:
+    0 36px 80px rgba(0,0,0,0.68),
+    0 8px  28px rgba(0,0,0,0.38);
+}
+
+.wf-card__inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Overlay label ───────────────────────────────────────── */
+.wf-card__overlay {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.wf-card__inner:hover .wf-card__overlay { opacity: 1; }
+
+.wf-card__name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+
+.wf-card__tag {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.58);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Card sizes ──────────────────────────────────────────── */
+/* At 1.5× scene scale these render visually larger          */
+.wf-card--lg .wf-card__inner,
+.wf-card--md .wf-card__inner,
+.wf-card--sm .wf-card__inner { width: 228px; height: 304px; }
+
+/* ── CTA button (fixed, below quote centre) ─────────────── */
+.wf-cta {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 21;
+  white-space: nowrap;
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.wf-cta__pill {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: normal;
+  padding: 0.65rem 2rem;
+  border: 2px solid var(--accent-red);
+  color: var(--accent-red);
+  border-radius: 12px;
+  transition: all 0.4s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Badge for coming soon projects */
+.wf-card__badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent-red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 10;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(229, 37, 33, 0.4);
+}
+
+.wf-cta__pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+  z-index: -1;
+}
+
+.wf-cta__pill:hover::before {
+  transform: scaleX(1);
+}
+
+.wf-cta__pill:hover {
+  color: var(--text-white);
+}
+
+/* ── Tablet (≤1024px) ────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* no separate scene scale on tablet */
+  .wf-card--lg .wf-card__inner,
+  .wf-card--md .wf-card__inner,
+  .wf-card--sm .wf-card__inner { width: 200px; height: 266px; }
+  .wf-headline__title { font-size: clamp(3rem, 6vw, 6rem); letter-spacing: -2px; }
+}
+
+/* ── Mobile (≤768px) — vertical stack, no scroll anim ────── */
+@media (max-width: 768px) {
+  .wf-scroll-container { height: auto; }
+  .wf-section {
+    position: static;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    padding: 60px 20px 80px;
+    display: block;
+  }
+  .wf-scene {
+    position: static;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .wf-headline {
+    position: static;
+    display: block;
+    margin-bottom: 32px;
+    text-align: center;
+    pointer-events: auto;
+  }
+  .wf-headline__title { font-size: clamp(2rem, 10vw, 3.5rem); letter-spacing: -1px; }
+  .wf-card {
+    position: static;
+    width: 100%;
+    max-width: 380px;
+    transform: none !important;
+  }
+  .wf-card--lg .wf-card__inner,
+  .wf-card--md .wf-card__inner,
+  .wf-card--sm .wf-card__inner { width: 100%; height: 260px; }
+  .wf-card__overlay { opacity: 1; }
+  .wf-cta { position: static; transform: none; display: flex; justify-content: center; margin-top: 32px; }
+}
+
+
+/* ============================================================
+   INTRO SECTION  (.nh-*)
+   Editorial identity block — marquee → headline → bio → quote
+   ============================================================ */
+
+@keyframes nh-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Section shell ───────────────────────────────────────── */
+.nh {
+  background: #0d0d0d;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Role strip — atmospheric background signal ──────────── */
+.nh-ticker {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0;
+  margin-top: 28px;     /* breathing space from section top */
+  flex-shrink: 0;
+  opacity: 0.68;
+  z-index: 1;           /* behind headline layer */
+  position: relative;
+  filter: blur(0.2px);  /* subtle atmospheric softening */
+}
+
+.nh-ticker__track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  animation: nh-ticker 24s linear infinite;
+}
+
+.nh-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: #BDBDBD;
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+}
+
+/* ── Red square separator — cap-height sized (≈8px at 12px text) */
+.nh-ticker__sep {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #E50914;
+  border-radius: 1px;
+  margin: 0 24px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── Content shell — vertically centres the inner block ─── */
+.nh-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 72px 48px 80px;
+}
+
+/* ── Inner block — all elements share the same left edge ── */
+.nh-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  /* left-align children to each other */
+  text-align: left;
+  width: fit-content;       /* block only as wide as its widest child */
+}
+
+/* ── Identity headline — 96px ────────────────────────────── */
+.nh-title {
+  font-family: var(--font-body);
+  font-size: 96px;
+  font-weight: 700;
+  color: #E50914;
+  line-height: 0.84;
+  letter-spacing: -3px;
+  margin: 0 0 26px;
+}
+
+.nh-title__row {
+  display: block;
+}
+
+/* ── Bio — regular 20px ──────────────────────────────────── */
+.nh-bio {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.48);
+  max-width: 560px;
+  margin: 0 0 26px;
+}
+
+/* ── Philosophy — regular 32px ───────────────────────────── */
+.nh-quote {
+  font-family: var(--font-body);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0;
+  max-width: 640px;
+}
+
+
+/* CDG word reveal on .nh-quote--reveal
+   Words dim (opacity 0.12) to bright white on scroll.
+   Pure opacity only - no blur - exactly like CDG. */
+.nh-word {
+  display: inline-block;
+  opacity: calc(0.12 + var(--nh-reveal, 0) * 0.88);
+  transition: opacity 0.06s linear;
+  will-change: opacity;
+}
+/* ── Tablet (≤1024px) ────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .nh-ticker { opacity: 0.60; }
+  .nh-ticker__item { font-size: 11px; letter-spacing: 2.4px; }
+  .nh-content { padding: 56px 40px 72px; }
+  .nh-title { font-size: 72px; letter-spacing: -2px; }
+  .nh-quote { font-size: 26px; }
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nh-ticker { opacity: 0.38; }
+  .nh-ticker__track { animation-duration: 26.4s; }  /* 10% slower on mobile */
+  .nh-ticker__item { font-size: 10px; letter-spacing: 2px; }
+  .nh-ticker__sep { width: 6px; height: 6px; margin: 0 18px; }
+  .nh-content { padding: 48px 24px 64px; }
+  .nh-block { width: 100%; }
+  .nh-title { font-size: 52px; letter-spacing: -1.5px; margin-bottom: 24px; }
+  .nh-bio { font-size: 16px; max-width: 100%; margin-bottom: 28px; }
+  .nh-quote { font-size: 22px; max-width: 100%; }
 }

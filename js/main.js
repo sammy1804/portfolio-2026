@@ -5,10 +5,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     initLoader();
     initDock();
+    initHeroGrid();
     initHeroScroll();
     initHeroMeta();
     initHobbies();
     initWorkFilters();
+    initNhQuoteReveal();   // CDG word reveal on "I design experiences..."
+    initWorkFloat();
+    initQuoteSticky();
     initJourneyHovers();
     initScrollReveal();
     initSkillsClone();
@@ -31,6 +35,11 @@ function initDock() {
     if (!toggle || !bento) return;
 
     toggle.addEventListener('click', () => {
+        // Close chatbot if open before toggling menu
+        const chatOverlay = document.getElementById('chatbot-overlay');
+        if (chatOverlay?.classList.contains('active')) {
+            window.closeChatbot();
+        }
         const isOpen = bento.classList.toggle('is-open');
         toggle.classList.toggle('is-open', isOpen);
     });
@@ -253,6 +262,51 @@ function initNavToggle() {
 }
 
 // ====================================
+// ====================================
+//  HERO GRID PATTERN
+// ====================================
+function initHeroGrid() {
+  const grid = document.getElementById('hero-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  // opts: { text, size:'lg'|'md', pos:'top'|'bottom', hl:bool }
+  function makeCell(opts) {
+    opts = opts || {};
+    const el = document.createElement('div');
+    el.className = 'grid-cell' + (opts.hl ? ' grid-cell--hl' : '');
+    if (opts.text) {
+      const sz  = opts.size || 'md';
+      const bot = opts.pos === 'bottom' ? ' grid-cell__label--b' : '';
+      el.innerHTML = '<span class="grid-cell__label grid-cell__label--' + sz + bot + '">'
+        + opts.text.replace(/\n/g, '<br>') + '</span>';
+    }
+    return el;
+  }
+
+  const e  = function()            { return makeCell(); };
+  const h  = function()            { return makeCell({ hl: true }); };
+  const tT = function(txt, sz)     { return makeCell({ text: txt, size: sz || 'md', pos: 'top' }); };
+  const tB = function(txt, sz)     { return makeCell({ text: txt, size: sz || 'md', pos: 'bottom' }); };
+
+  // 9 cols × 4 rows — matches reference layout
+  const rows = [
+    // Row 0: PRODUCT col0 | DESIGNER col2 | DETAIL bottom-aligned col7 (second-last)
+    [ tT('PRODUCT',  'lg'), e(), tT('DESIGNER', 'lg'), e(), e(), e(), e(), tB('DETAIL', 'lg'), e() ],
+
+    // Row 1: TURN IDEAS col2
+    [ e(), e(), tT('TURN IDEAS\nINTO\nINTERFACES\nPEOPLE\nACTUALLY\nUSE', 'md'), e(), e(), e(), e(), e(), e() ],
+
+    // Row 2: CLARITY bottom-left col1 | GOOD IS NOT col7
+    [ e(), tB('CLARITY\nIS\nTHE GOAL', 'md'), e(), e(), e(), e(), e(), tT("GOOD IS NOT\nWHERE WE STOP.\nIT'S WHERE\nWE BEGIN.", 'md'), e() ],
+
+    // Row 3: all empty
+    [ e(), e(), e(), e(), e(), e(), e(), e(), e() ],
+  ];
+
+  rows.forEach(function(row) { row.forEach(function(el) { grid.appendChild(el); }); });
+}
+
 //  HERO SCROLL
 //   - Frame (fullscreen → shrink to ~500×356 card)
 //   - Photo scales to 0.75×
@@ -279,9 +333,10 @@ function initHeroScroll() {
         // Progress: 0 → 1 over 1.5× viewport height
         const progress = Math.max(0, Math.min(1, scrolled / (vh * 1.5)));
 
-        // ── FRAME: shrink from fullscreen to ~456×314 centered, shifted up 84px ──
-        const targetW = Math.min(456, vw * 0.32);
-        const targetH = 314;
+        // ── FRAME: shrink to landscape card on mobile, portrait card on desktop ──
+        const isMobile = vw < 768;
+        const targetW = isMobile ? Math.min(vw - 40, 360) : Math.min(456, vw * 0.32);
+        const targetH = isMobile ? 220 : 314;
 
         const frameW = vw - progress * (vw - targetW);
         const frameH = vh - progress * (vh - targetH);
@@ -289,8 +344,8 @@ function initHeroScroll() {
         // Border radius: 0 → 24px
         const radius = progress * 24;
 
-        // Shift upward by 84px at full scroll
-        const offsetY = progress * -84;
+        // Shift upward: less on mobile
+        const offsetY = progress * (isMobile ? -60 : -84);
 
         frame.style.width = `${frameW}px`;
         frame.style.height = `${frameH}px`;
@@ -300,13 +355,15 @@ function initHeroScroll() {
         // ── SILHOUETTE: scale down as frame shrinks, fade out near end ──
         if (photo) {
             const photoScale = 1 - progress * 0.2;
-            photo.style.transform = `translateX(-50%) scale(${photoScale})`;
+            photo.style.transform = `scale(${photoScale})`;
             photo.style.opacity = Math.max(0, 1 - progress * 2.5);
         }
 
         // ── PORTRAIT WRAP: fade in as card forms (progress 0.65 → 1) ──
         if (portraitWrap) {
-            portraitWrap.style.opacity = Math.max(0, Math.min(1, (progress - 0.65) / 0.35));
+            const op = Math.max(0, Math.min(1, (progress - 0.65) / 0.35));
+            portraitWrap.style.opacity = op;
+            portraitWrap.style.pointerEvents = op > 0.05 ? 'auto' : 'none';
         }
 
         // ── FRAME: add glass border class at card state ──
@@ -324,35 +381,35 @@ function initHeroScroll() {
             heroMeta.style.opacity = Math.max(0, 0.6 - progress * 2);
         }
 
-        // ── 4 FLOATING CARDS: slide in after 30% progress ──
-        const cardStart = 0.3;
-        const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / (1 - cardStart)));
-
-        floatCards.forEach((card, i) => {
-            const stagger = i * 0.07;
-            const cp = Math.max(0, Math.min(1, (cardProgress - stagger) / (1 - stagger)));
-            const eased = 1 - Math.pow(1 - cp, 3);
-
-            card.style.opacity = eased;
-
-            // Final resting tilts (cards settle at a slight angle)
+        // ── 4 FLOATING CARDS ──
+        if (isMobile) {
+            // On mobile: static row at bottom, always visible after frame starts shrinking
+            floatCards.forEach(card => {
+                card.style.opacity = Math.min(1, progress * 3);
+                card.style.transform = '';
+            });
+        } else {
+            // Desktop: slide in from edges after 30% progress
+            const cardStart = 0.3;
+            const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / (1 - cardStart)));
             const restTilt = [-3.5, 3, -2.5, 2.5];
 
-            switch (i) {
-                case 0: // Status — from left, rests at -3.5deg
-                    card.style.transform = `translateX(${-260 * (1 - eased)}px) rotate(${-7 * (1 - eased) + restTilt[0] * eased}deg)`;
-                    break;
-                case 1: // Craft — from right, rests at +3deg
-                    card.style.transform = `translateX(${260 * (1 - eased)}px) rotate(${6 * (1 - eased) + restTilt[1] * eased}deg)`;
-                    break;
-                case 2: // Numbers — from bottom-left, rests at -2.5deg
-                    card.style.transform = `translate(${-220 * (1 - eased)}px, ${160 * (1 - eased)}px) rotate(${-5 * (1 - eased) + restTilt[2] * eased}deg)`;
-                    break;
-                case 3: // Ask Me — from bottom-right, rests at +2.5deg
-                    card.style.transform = `translate(${220 * (1 - eased)}px, ${120 * (1 - eased)}px) rotate(${5 * (1 - eased) + restTilt[3] * eased}deg)`;
-                    break;
-            }
-        });
+            floatCards.forEach((card, i) => {
+                const stagger = i * 0.07;
+                const cp = Math.max(0, Math.min(1, (cardProgress - stagger) / (1 - stagger)));
+                const eased = 1 - Math.pow(1 - cp, 3);
+
+                card.style.opacity = eased;
+
+                // Cards fade in from near their resting position — no off-screen travel
+                switch (i) {
+                    case 0: card.style.transform = `translateX(${-50 * (1 - eased)}px) rotate(${restTilt[0] * eased}deg)`; break;
+                    case 1: card.style.transform = `translateX(${50 * (1 - eased)}px) rotate(${restTilt[1] * eased}deg)`; break;
+                    case 2: card.style.transform = `translate(${-50 * (1 - eased)}px, ${30 * (1 - eased)}px) rotate(${restTilt[2] * eased}deg)`; break;
+                    case 3: card.style.transform = `translate(${50 * (1 - eased)}px, ${30 * (1 - eased)}px) rotate(${restTilt[3] * eased}deg)`; break;
+                }
+            });
+        }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -363,8 +420,8 @@ function initHeroScroll() {
 //  HERO META — live time display
 // ====================================
 function initHeroMeta() {
-    const timeEl = document.getElementById('hero-time');
-    if (!timeEl) return;
+    const timeEl     = document.getElementById('hero-time');
+    const dockTimeEl = document.getElementById('dock-time');
 
     function updateTime() {
         const now = new Date();
@@ -374,7 +431,9 @@ function initHeroMeta() {
         hours = hours % 12 || 12;
         const mm = minutes < 10 ? '0' + minutes : minutes;
         const hh = hours < 10 ? '0' + hours : hours;
-        timeEl.textContent = hh + ':' + mm + ' ' + ampm;
+        const timeStr = hh + ':' + mm + ' ' + ampm;
+        if (timeEl)     timeEl.textContent     = timeStr;
+        if (dockTimeEl) dockTimeEl.textContent = timeStr;
     }
 
     updateTime();
@@ -1123,10 +1182,17 @@ function initChatFloat() {
 
 window.openChatbot = function () {
     const overlay = document.getElementById('chatbot-overlay');
-    if (overlay) {
-        overlay.classList.add('active');
-        document.getElementById('chatbot-input')?.focus();
-    }
+    if (!overlay) return;
+    // Close menu if open before opening chat
+    const bento = document.getElementById('bento-nav');
+    const toggle = document.getElementById('dock-toggle');
+    bento?.classList.remove('is-open');
+    toggle?.classList.remove('is-open');
+    // Match dock width exactly
+    const dock = document.getElementById('dock');
+    if (dock) overlay.style.width = dock.offsetWidth + 'px';
+    overlay.classList.add('active');
+    document.getElementById('chatbot-input')?.focus();
 };
 
 window.closeChatbot = function () {
@@ -1171,6 +1237,14 @@ function initChatbot() {
     if (!input || !sendBtn || !messagesEl) return;
 
     const history = [];
+
+    // Keep width in sync with dock on resize
+    window.addEventListener('resize', () => {
+        const dock = document.getElementById('dock');
+        if (dock && overlay?.classList.contains('active')) {
+            overlay.style.width = dock.offsetWidth + 'px';
+        }
+    });
 
     // Close on overlay backdrop click
     overlay?.addEventListener('click', (e) => {
@@ -1270,194 +1344,545 @@ function initChatbot() {
 //  FOOTER MINI GAME — Shape Catcher
 // ====================================
 function initFooterGame() {
-    const canvas = document.getElementById('fg-canvas');
+    const canvas  = document.getElementById('fg-canvas');
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    const overlay  = document.getElementById('fg-overlay');
-    const scoreEl  = document.getElementById('fg-score');
-    const timerEl  = document.getElementById('fg-timer');
-    const bestEl   = document.getElementById('fg-best');
-    const olScore  = document.getElementById('fg-ol-score');
-    const playBtn  = document.getElementById('fg-play-btn');
+    const ctx     = canvas.getContext('2d');
+    const overlay = document.getElementById('fg-overlay');
+    const scoreEl = document.getElementById('fg-score');
+    const speedEl = document.getElementById('fg-timer');
+    const bestEl  = document.getElementById('fg-best');
+    const olScore = document.getElementById('fg-ol-score');
+    const olHint  = document.getElementById('fg-ol-hint');
+    const playBtn = document.getElementById('fg-play-btn');
 
-    let score = 0, best = 0, timeLeft = 30;
-    let gameActive = false;
-    let shapes = [], animId, countdownId;
-    let spawnTimer = 0, spawnInterval = 1200;
-    let lastTs = 0;
+    // ── Constants ─────────────────────────────────
+    const GRAVITY      = 0.38;
+    const FLAP_V       = -7.2;
+    const PIPE_W       = 48;
+    const PIPE_GAP     = 130;
+    const BASE_SPEED   = 2.6;
+    const BASE_INTERVAL= 1700; // ms between pipes
 
-    // Responsive canvas height
+    let bird, pipes, score, best = 0;
+    let pipeSpeed, pipeInterval, pipeTimer;
+    let gameActive = false, animId = null, lastTs = 0;
+
+    // ── Responsive canvas ─────────────────────────
     function resize() {
-        const w = canvas.parentElement.offsetWidth;
-        canvas.width  = w;
+        canvas.width  = canvas.parentElement.offsetWidth;
         canvas.height = parseInt(getComputedStyle(canvas).height) || 280;
     }
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', () => { resize(); if (!gameActive) drawIdle(); });
 
-    // ── Shape class ──────────────────────────────
-    class Shape {
-        constructor() {
-            const m = 48;
-            this.x   = m + Math.random() * (canvas.width  - m * 2);
-            this.y   = m + Math.random() * (canvas.height - m * 2);
-            this.r   = 20 + Math.random() * 16;
-            this.rot = (Math.random() - 0.5) * 0.7;
-            this.kind = Math.random() > 0.45 ? 'circle' : 'rect';
-            this.life  = 1300 + Math.random() * 500;
-            this.age   = 0;
-            this.hit   = false;
-            this.hitAge = 0;
-        }
-
-        get alive() {
-            return this.hit ? this.hitAge < 260 : this.age < this.life;
-        }
-
-        get alpha() {
-            if (this.hit) return Math.max(0, 1 - this.hitAge / 200);
-            const t = this.age / this.life;
-            if (t < 0.15) return t / 0.15;
-            if (t > 0.72) return 1 - (t - 0.72) / 0.28;
-            return 1;
-        }
-
-        update(dt) {
-            this.age += dt;
-            if (this.hit) this.hitAge += dt;
-        }
-
-        draw() {
-            const a = Math.max(0, this.alpha);
-            ctx.save();
-            ctx.globalAlpha = a;
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.rot);
-
-            if (this.hit) {
-                // Burst ring on hit
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 2;
-                const sr = this.r + this.hitAge * 0.12;
-                ctx.beginPath(); ctx.arc(0, 0, sr, 0, Math.PI * 2); ctx.stroke();
-                ctx.fillStyle = 'rgba(255,255,255,0.3)';
-                ctx.beginPath(); ctx.arc(0, 0, this.r * 0.6, 0, Math.PI * 2); ctx.fill();
-            } else {
-                ctx.fillStyle = '#E63226';
-                if (this.kind === 'circle') {
-                    ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI * 2); ctx.fill();
-                } else {
-                    ctx.beginPath();
-                    const w = this.r * 2, h = this.r * 1.1;
-                    ctx.roundRect(-w / 2, -h / 2, w, h, 4);
-                    ctx.fill();
-                }
-            }
-            ctx.restore();
-        }
-
-        contains(mx, my) {
-            return Math.hypot(mx - this.x, my - this.y) < this.r * 1.5;
-        }
+    // ── Bird ──────────────────────────────────────
+    function makeBird() {
+        return { x: Math.floor(canvas.width * 0.2), y: canvas.height / 2,
+                 vy: 0, w: 30, h: 30 };
     }
 
-    // ── Draw idle screen ──────────────────────────
-    function drawIdle() {
-        ctx.fillStyle = '#0d0d0d';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ── Pipe factory ──────────────────────────────
+    function makePipe() {
+        const margin = 36;
+        const topH   = margin + Math.random() * (canvas.height - PIPE_GAP - margin * 2);
+        return { x: canvas.width + PIPE_W + 4, topH, bottomY: topH + PIPE_GAP, passed: false };
     }
-    drawIdle();
 
-    // ── Game loop ─────────────────────────────────
-    function loop(ts) {
-        if (!gameActive) return;
-        const dt = Math.min(ts - lastTs, 60);
-        lastTs = ts;
-        spawnTimer += dt;
-
-        if (spawnTimer >= spawnInterval) {
-            shapes.push(new Shape());
-            spawnTimer = 0;
-            spawnInterval = Math.max(450, spawnInterval - 12);
-        }
-
-        ctx.fillStyle = '#0d0d0d';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Subtle grid lines
+    // ── Drawing helpers ───────────────────────────
+    function drawGrid() {
         ctx.strokeStyle = 'rgba(255,255,255,0.025)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < canvas.width; x += 40) {
+        ctx.lineWidth   = 1;
+        for (let x = 0; x < canvas.width;  x += 40) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
         }
         for (let y = 0; y < canvas.height; y += 40) {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
         }
+    }
 
-        shapes = shapes.filter(s => s.alive);
-        shapes.forEach(s => { s.update(dt); s.draw(); });
+    function drawPipe(p) {
+        const R = 6; // corner radius on pipe caps
+
+        // ── Top pipe body ──
+        ctx.fillStyle = '#1c1c1c';
+        ctx.fillRect(p.x, 0, PIPE_W, p.topH - R);
+
+        // Top pipe cap (wider, rounded bottom corners)
+        ctx.beginPath();
+        ctx.roundRect(p.x - 4, p.topH - 20, PIPE_W + 8, 20, [0, 0, R, R]);
+        ctx.fill();
+
+        // Red accent line at cap bottom
+        ctx.fillStyle = '#E50914';
+        ctx.fillRect(p.x - 4, p.topH - 3, PIPE_W + 8, 3);
+
+        // ── Bottom pipe body ──
+        ctx.fillStyle = '#1c1c1c';
+        ctx.fillRect(p.x, p.bottomY + R, PIPE_W, canvas.height - p.bottomY);
+
+        // Bottom pipe cap (wider, rounded top corners)
+        ctx.beginPath();
+        ctx.roundRect(p.x - 4, p.bottomY, PIPE_W + 8, 20, [R, R, 0, 0]);
+        ctx.fill();
+
+        // Red accent line at cap top
+        ctx.fillStyle = '#E50914';
+        ctx.fillRect(p.x - 4, p.bottomY, PIPE_W + 8, 3);
+    }
+
+    function drawBird(b) {
+        ctx.save();
+        ctx.translate(b.x + b.w / 2, b.y + b.h / 2);
+        const tilt = Math.max(-0.45, Math.min(0.9, b.vy * 0.045));
+        ctx.rotate(tilt);
+
+        // Shadow
+        ctx.fillStyle = 'rgba(229,9,20,0.22)';
+        ctx.beginPath();
+        ctx.ellipse(2, b.h / 2 + 2, b.w * 0.45, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Body — red rounded square
+        ctx.fillStyle = '#E50914';
+        ctx.beginPath();
+        ctx.roundRect(-b.w / 2, -b.h / 2, b.w, b.h, 8);
+        ctx.fill();
+
+        // Inner highlight
+        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+        ctx.beginPath();
+        ctx.roundRect(-b.w / 2 + 3, -b.h / 2 + 3, b.w - 6, b.h / 2 - 2, [5, 5, 0, 0]);
+        ctx.fill();
+
+        // "S" letter
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px "Reenie Beanie", cursive';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('S', 0, 1);
+
+        ctx.restore();
+    }
+
+    function drawScore() {
+        ctx.font         = 'bold 28px "JetBrains Mono", monospace';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle    = 'rgba(255,255,255,0.12)';
+        ctx.fillText(score, canvas.width / 2 + 1, 17);
+        ctx.fillStyle    = '#ffffff';
+        ctx.fillText(score, canvas.width / 2, 16);
+    }
+
+    function drawIdle() {
+        ctx.fillStyle = '#0d0d0d';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        // Draw a static centered bird preview
+        const b = { x: canvas.width * 0.2 - 15, y: canvas.height / 2 - 15, w: 30, h: 30, vy: 0 };
+        drawBird(b);
+    }
+
+    // ── Collision ─────────────────────────────────
+    function hits(b, p) {
+        const pad = 3;
+        if (b.x + b.w - pad < p.x - 4 || b.x + pad > p.x + PIPE_W + 4) return false;
+        return (b.y + pad < p.topH) || (b.y + b.h - pad > p.bottomY);
+    }
+
+    // ── Speed up every 5 points ───────────────────
+    function updateSpeed() {
+        const level = 1 + Math.floor(score / 5) * 0.12;
+        pipeSpeed    = BASE_SPEED   * level;
+        pipeInterval = Math.max(900, BASE_INTERVAL / level);
+        speedEl.textContent = `×${(pipeSpeed / BASE_SPEED).toFixed(1)}`;
+    }
+
+    // ── Game loop ─────────────────────────────────
+    function loop(ts) {
+        if (!gameActive) return;
+        const dt = Math.min(ts - lastTs, 50);
+        lastTs = ts;
+
+        // Physics
+        bird.vy += GRAVITY;
+        bird.y  += bird.vy;
+
+        // Spawn pipes
+        pipeTimer += dt;
+        if (pipeTimer >= pipeInterval) {
+            pipes.push(makePipe());
+            pipeTimer = 0;
+        }
+
+        // Move & cull pipes
+        for (const p of pipes) p.x -= pipeSpeed;
+        pipes = pipes.filter(p => p.x + PIPE_W + 4 > -10);
+
+        // Score
+        for (const p of pipes) {
+            if (!p.passed && bird.x > p.x + PIPE_W) {
+                p.passed = true;
+                score++;
+                scoreEl.textContent = score;
+                updateSpeed();
+            }
+        }
+
+        // Death check
+        if (bird.y + bird.h > canvas.height || bird.y < 0 || pipes.some(p => hits(bird, p))) {
+            end(); return;
+        }
+
+        // Draw frame
+        ctx.fillStyle = '#0d0d0d';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        pipes.forEach(drawPipe);
+        drawBird(bird);
+        drawScore();
 
         animId = requestAnimationFrame(loop);
     }
 
-    // ── Start game ────────────────────────────────
+    // ── Start ─────────────────────────────────────
     function start() {
-        score = 0; timeLeft = 30; gameActive = true;
-        shapes = []; spawnTimer = 0; spawnInterval = 1200;
+        bird = makeBird();
+        pipes = [];
+        score = 0;
+        pipeTimer = 0;
+        pipeSpeed    = BASE_SPEED;
+        pipeInterval = BASE_INTERVAL;
+        gameActive   = true;
         scoreEl.textContent = 0;
-        timerEl.textContent = '0:30';
+        speedEl.textContent = '×1.0';
         overlay.style.display = 'none';
         lastTs = performance.now();
         animId = requestAnimationFrame(loop);
-
-        countdownId = setInterval(() => {
-            timeLeft--;
-            const s = timeLeft.toString().padStart(2, '0');
-            timerEl.textContent = `0:${s}`;
-            if (timeLeft <= 0) end();
-        }, 1000);
     }
 
-    // ── End game ──────────────────────────────────
+    // ── End ───────────────────────────────────────
     function end() {
         gameActive = false;
-        cancelAnimationFrame(animId);
-        clearInterval(countdownId);
-
+        cancelAnimationFrame(animId); animId = null;
         const isNew = score > best;
         if (isNew) { best = score; bestEl.textContent = best; }
-
-        olScore.textContent = `${score} pts`;
-        playBtn.textContent = 'Play Again →';
-        document.getElementById('fg-ol-hint').textContent =
-            isNew ? '🔥 New best score!' : `Best: ${best}`;
+        olScore.textContent   = score > 0 ? `${score} pts` : 'DEAD';
+        playBtn.textContent   = 'Try Again →';
+        olHint.textContent    = isNew ? '🔥 New best!' : `Best: ${best}`;
         overlay.style.display = 'flex';
-
         drawIdle();
     }
 
-    // ── Click / tap to catch ──────────────────────
-    function onHit(e) {
-        if (!gameActive) return;
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const src  = e.touches ? e.touches[0] : e;
-        const mx = (src.clientX - rect.left) * (canvas.width  / rect.width);
-        const my = (src.clientY - rect.top)  * (canvas.height / rect.height);
+    // ── Controls ──────────────────────────────────
+    function flap(e) {
+        if (e) e.preventDefault();
+        if (!gameActive) { start(); return; }
+        bird.vy = FLAP_V;
+    }
 
-        for (let i = shapes.length - 1; i >= 0; i--) {
-            const s = shapes[i];
-            if (!s.hit && s.contains(mx, my)) {
-                s.hit = true;
-                score++;
-                scoreEl.textContent = score;
-                break;
+    canvas.addEventListener('click', flap);
+    canvas.addEventListener('touchstart', flap, { passive: false });
+    playBtn.addEventListener('click', start);
+
+    // Space bar — only when canvas is on screen
+    document.addEventListener('keydown', e => {
+        if (e.code !== 'Space') return;
+        const rect = canvas.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            e.preventDefault();
+            flap();
+        }
+    });
+
+    drawIdle();
+}
+
+// ====================================
+//  INTRO QUOTE — CDG WORD REVEAL
+//  "I design experiences across space
+//   and interface."
+//  Like CDG's "We build what can't be
+//  ignored." — pure opacity per word.
+// ====================================
+function initNhQuoteReveal() {
+    const quote = document.querySelector('.nh-quote--reveal');
+    if (!quote) return;
+
+    const words = Array.from(quote.querySelectorAll('.nh-word'));
+    if (!words.length) return;
+
+    // All words start dim
+    words.forEach(w => w.style.setProperty('--nh-reveal', '0'));
+
+    const N = words.length;
+    const windowSize = 0.22;
+    const totalSpread = 0.65;
+
+    function getRevealForWord(i, progress) {
+        const start = (i / Math.max(N - 1, 1)) * totalSpread;
+        const end   = start + windowSize;
+        return Math.max(0, Math.min(1, (progress - start) / (end - start)));
+    }
+
+    const section = quote.closest('section') || document.querySelector('.nh');
+    if (!section) return;
+
+    let active = false;
+    let rafId  = null;
+
+    function getProgress() {
+        const rect = section.getBoundingClientRect();
+        const total = section.offsetHeight + window.innerHeight;
+        return Math.max(0, Math.min(1, (window.innerHeight - rect.top) / total));
+    }
+
+    function tick() {
+        const p = getProgress();
+        words.forEach((word, i) => {
+            word.style.setProperty('--nh-reveal', getRevealForWord(i, p).toFixed(3));
+        });
+        if (active) rafId = requestAnimationFrame(tick);
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                active = true;
+                if (!rafId) rafId = requestAnimationFrame(tick);
+            } else {
+                active = false;
+                if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                if (getProgress() >= 0.9) {
+                    words.forEach(w => w.style.setProperty('--nh-reveal', '1'));
+                }
+            }
+        });
+    }, { threshold: 0 });
+
+    observer.observe(section);
+}
+
+// ====================================
+//  WORK SECTION — CARDENAS SCROLL
+//  220vh container | 1.5× scaled scene
+//  Cards rise upward on scroll.
+//  Text words reveal sequentially like CDG.
+// ====================================
+function initWorkFloat() {
+    const container = document.querySelector('.wf-scroll-container');
+    const section   = document.querySelector('.wf-section');
+    const scene     = document.getElementById('wf-scene');
+    if (!container || !section || !scene) return;
+
+    const cards = Array.from(scene.querySelectorAll('.wf-card'));
+    const words = []; // headline removed — no wf-words
+    const isMobile = () => window.innerWidth <= 768;
+
+    /* Mouse parallax — gentle nudge only (separate from scroll) */
+    let mouseX = 0, mouseY = 0;
+    let curMouseX = 0, curMouseY = 0;
+    const MOUSE_STRENGTH = 18; // px max offset in scene-space
+
+    /* Scroll progress 0 → 1 */
+    function getScrollProgress() {
+        const top = container.getBoundingClientRect().top;
+        const travel = container.offsetHeight - window.innerHeight;
+        return travel > 0 ? Math.max(0, Math.min(1, -top / travel)) : 0;
+    }
+
+    /* Parse CSS percentage or px to a scene-relative value */
+    function getInitialTop(card) {
+        // --wf-y is set as a percentage like "60%"
+        const raw = card.style.getPropertyValue('--wf-y') || '50%';
+        const pct = parseFloat(raw) / 100;
+        // scene inset is 0, but because of 1.5× scale the visual area
+        // is smaller — use section height as reference
+        return pct * section.offsetHeight;
+    }
+
+    /* Total upward travel — snappy with 220vh container */
+    const TRAVEL = 1.8;
+
+    let rafId = null;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    const cta = document.getElementById('wf-cta');
+
+    function updateOverlays(progress) {
+        // CTA fades in at progress 0.55 → 0.75
+        if (cta) {
+            const cOp = Math.max(0, Math.min(1, (progress - 0.55) / 0.20));
+            cta.style.opacity    = cOp.toFixed(3);
+            cta.style.visibility = cOp > 0.01 ? 'visible' : 'hidden';
+        }
+    }
+
+    function tick() {
+        if (isMobile()) { rafId = null; return; }
+
+        curMouseX = lerp(curMouseX, mouseX, 0.06);
+        curMouseY = lerp(curMouseY, mouseY, 0.06);
+
+        const progress = getScrollProgress();
+        const sectionH = section.offsetHeight;
+
+        /* Overlay reveals driven by scroll */
+        updateOverlays(progress);
+
+        /* Cards scrolling upward */
+        cards.forEach(card => {
+            const speed = parseFloat(card.dataset.speed || 1);
+            const rot   = card.style.getPropertyValue('--wf-rot') || '0deg';
+            const initTop = getInitialTop(card);
+            const scrollOffset = progress * TRAVEL * sectionH * speed;
+            const mx = curMouseX * MOUSE_STRENGTH * (speed * 0.4);
+            const my = curMouseY * MOUSE_STRENGTH * 0.25;
+            card.style.top = `${initTop}px`;
+            card.style.transform = `rotate(${rot}) translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
+        });
+
+        rafId = requestAnimationFrame(tick);
+    }
+
+    /* Mouse tracking (normalised –1…+1) */
+    section.addEventListener('mousemove', e => {
+        if (isMobile()) return;
+        const r = section.getBoundingClientRect();
+        mouseX = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+        mouseY = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+    }, { passive: true });
+
+    section.addEventListener('mouseleave', () => { mouseX = 0; mouseY = 0; });
+
+    /* Initialise words to dim state */
+    words.forEach(w => w.style.setProperty('--wf-reveal', '0'));
+
+    /* RAF via IntersectionObserver */
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!rafId) rafId = requestAnimationFrame(tick);
+            } else {
+                if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                if (cta) { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; }
+                if (isMobile()) {
+                    cards.forEach(c => { c.style.transform = ''; c.style.top = ''; });
+                    words.forEach(w => w.style.setProperty('--wf-reveal', '1'));
+                }
+            }
+        });
+    }, { threshold: 0 });
+
+    observer.observe(container);
+
+    /* Mobile cleanup on resize */
+    window.addEventListener('resize', () => {
+        if (isMobile()) {
+            mouseX = 0; mouseY = 0;
+            cards.forEach(c => { c.style.transform = ''; c.style.top = ''; });
+            words.forEach(w => w.style.setProperty('--wf-reveal', '1'));
+        }
+    });
+}
+
+
+// ====================================
+//  QUOTE STICKY — single element FLIP:
+//  scrolls in flow → snaps fixed at
+//  current pos → transitions to centre
+//  → hides before journey section
+// ====================================
+function initQuoteSticky() {
+    const quote   = document.getElementById('nh-quote-inline');
+    const journey = document.getElementById('journey');
+    if (!quote) return;
+
+    let snapped      = false;
+    let hidden       = false;
+    let placeholder  = null;
+
+    function snapToCenter() {
+        const rect = quote.getBoundingClientRect();
+
+        // Insert same-size placeholder so layout doesn't collapse
+        placeholder = document.createElement('div');
+        placeholder.style.width  = rect.width  + 'px';
+        placeholder.style.height = rect.height + 'px';
+        placeholder.style.flexShrink = '0';
+        quote.parentNode.insertBefore(placeholder, quote);
+
+        // Lock element visually at its current position
+        quote.style.position = 'fixed';
+        quote.style.top      = rect.top  + 'px';
+        quote.style.left     = rect.left + 'px';
+        quote.style.width    = rect.width + 'px';
+        quote.style.margin   = '0';
+        quote.style.zIndex   = '20';
+        quote.style.transition = 'none';
+
+        // Next two frames: enable transition then move to centre
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                quote.style.transition = 'top 0.55s cubic-bezier(0.22,1,0.36,1), left 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1)';
+                quote.style.top       = '50%';
+                quote.style.left      = '50%';
+                quote.style.width     = '';
+                quote.style.transform = 'translate(-50%, -50%)';
+            });
+        });
+
+        snapped = true;
+    }
+
+    function unsnap() {
+        ['position','top','left','width','margin','zIndex','transition','transform','opacity','visibility']
+            .forEach(p => { quote.style[p] = ''; });
+        if (placeholder && placeholder.parentNode) {
+            placeholder.parentNode.removeChild(placeholder);
+            placeholder = null;
+        }
+        snapped = false;
+        hidden  = false;
+    }
+
+    function hideQuote() {
+        if (hidden) return;
+        hidden = true;
+        quote.style.transition = 'opacity 0.4s ease, visibility 0.4s';
+        quote.style.opacity    = '0';
+        quote.style.visibility = 'hidden';
+    }
+
+    function update() {
+        // Hide 300px before journey section enters viewport
+        if (journey) {
+            const jTop = journey.getBoundingClientRect().top;
+            if (jTop < window.innerHeight + 300) {
+                if (snapped) hideQuote();
+                return;
+            }
+            // Unhide if scrolled back up
+            if (hidden) unsnap();
+        }
+
+        const rect = quote.getBoundingClientRect();
+        const elCenterY = rect.top + rect.height / 2;
+        const vpCenterY = window.innerHeight / 2;
+
+        if (!snapped && elCenterY <= vpCenterY) {
+            snapToCenter();
+        } else if (snapped && !hidden) {
+            // Check placeholder to know if element scrolled back above centre
+            if (placeholder) {
+                const pRect = placeholder.getBoundingClientRect();
+                if (pRect.top + pRect.height / 2 > vpCenterY) unsnap();
             }
         }
     }
 
-    canvas.addEventListener('click', onHit);
-    canvas.addEventListener('touchstart', onHit, { passive: false });
-    playBtn.addEventListener('click', start);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
 }
