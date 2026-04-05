@@ -331,6 +331,8 @@ img {
   align-items: flex-start;
   justify-content: center;
   gap: 1px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .dock__meta-time {
@@ -340,6 +342,7 @@ img {
   color: rgba(255, 255, 255, 0.85);
   line-height: 1;
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 .dock__meta-loc {
@@ -350,6 +353,7 @@ img {
   line-height: 1;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* ================================ */
@@ -768,6 +772,15 @@ img {
   position: relative;
 }
 
+.hero__card-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  pointer-events: none;
+}
+
 /* ── Portrait photo ── */
 .hero__portrait {
   position: absolute;
@@ -1016,7 +1029,7 @@ img {
 .hero__float-card--1 {
   width: 22%;
   max-width: 240px;
-  top: 6%;
+  top: 12%;
   left: 24px;
 }
 
@@ -1024,7 +1037,7 @@ img {
 .hero__float-card--2 {
   width: 20%;
   max-width: 220px;
-  top: 6%;
+  top: 12%;
   right: 24px;
 }
 
@@ -1593,6 +1606,7 @@ img {
   max-width: 120px;
   opacity: 1;
 }
+
 
 /* ================================ */
 /*   AI CHATBOT MODAL               */
@@ -2663,11 +2677,11 @@ img {
 
 .journey__block-title {
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 600;
   font-size: 1.25rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-dark);
+  color: #111;
   margin-bottom: 1rem;
 }
 
@@ -2675,7 +2689,7 @@ img {
   font-size: 0.95rem;
   line-height: 1.7;
   letter-spacing: 0.02em;
-  color: #333;
+  color: #1a1a1a;
   margin-bottom: 0;
 }
 
@@ -2694,11 +2708,11 @@ img {
 
 /* Wabi Dimming effect when ANY highlight is hovered */
 .journey.is-hovering .journey__block-title {
-  color: #adb5bd;
+  color: #555;
 }
 
 .journey.is-hovering .journey__block-text {
-  color: #adb5bd;
+  color: #555;
 }
 
 /* Dimming override for Dark Theme */
@@ -3163,16 +3177,107 @@ img {
   letter-spacing: 1px;
 }
 
+/* ── Close button — hidden on desktop ── */
+.fg-close-btn {
+  display: none;
+}
+
+/* ── CTA row — holds play + contact buttons ── */
+.footer__cta-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* ── Mobile floating trigger — hidden on desktop ── */
+.fg-mobile-trigger {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .footer-game__header {
+  /* ── Game becomes a slide-up full-screen modal ── */
+  #footer-game {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    overflow-y: auto;
+    background: #0d0d0d;
+    padding: 1.5rem 1.2rem 2rem;
+    transform: translateY(100%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
     flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  #footer-game.fg-open {
+    transform: translateY(0);
+  }
+
+  /* Bigger canvas in full-screen modal */
+  #fg-canvas {
+    height: 56vh !important;
+  }
+
+  /* Close button visible inside modal */
+  .fg-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: flex-end;
+    transition: background 0.2s;
+  }
+  .fg-close-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .footer-game__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 1rem;
   }
   .footer-game__meta {
-    gap: 1.5rem;
+    gap: 1.2rem;
   }
-  #fg-canvas {
-    height: 220px;
+
+  /* ── Footer CTA row — horizontal on mobile ── */
+  .footer__cta-row {
+    flex-direction: row;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Footer play button (inline, not fixed) ── */
+  .fg-mobile-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    background: var(--accent-red);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 1rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .fg-mobile-trigger:active {
+    transform: scale(0.97);
+    background: #c5201a;
   }
 }
 
@@ -3485,7 +3590,7 @@ img {
   /* float cards handled below via horizontal row — not hidden */
 
   .hero__spacer {
-    height: 100vh;
+    height: 140vh;
   }
 
   .hero__scroll-row {
@@ -3884,13 +3989,13 @@ img {
 @media (max-width: 768px) {
   .hero__grid-pattern {
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
   }
   .hero__grid-pattern .grid-cell__label--lg {
-    font-size: clamp(0.45rem, 1.5vw, 0.65rem);
+    font-size: 14px;
   }
   .hero__grid-pattern .grid-cell__label--md {
-    font-size: clamp(0.32rem, 0.9vw, 0.45rem);
+    font-size: 14px;
   }
 }
 
@@ -3922,6 +4027,10 @@ img {
 /* ── Mobile (≤768px) ── */
 @media (max-width: 768px) {
 
+  /* ── Loader — hide "100" label ── */
+  .loader__pill-label:last-child { display: none; }
+  .loader__pill-label:first-child { display: none; }
+
   /* ── Dock ── */
   .dock {
     max-width: calc(100vw - 2rem);
@@ -3942,6 +4051,13 @@ img {
     font-size: 0.72rem;
     border-radius: 10px;
   }
+  /* Dock meta — shrink font slightly so it fits */
+  .dock__meta {
+    height: 38px;
+    padding: 0 0.6rem;
+  }
+  .dock__meta-time { font-size: 0.62rem; }
+  .dock__meta-loc  { font-size: 0.5rem; }
 
   /* ── Bento nav — near full-width bottom sheet ── */
   .bento-nav {
@@ -3988,45 +4104,88 @@ img {
     object-position: center 15%;
   }
 
-  /* ── Float cards — horizontal scrollable row at bottom ── */
+  /* Allow cards to overflow the sticky container on mobile */
+  .hero__sticky {
+    overflow: visible;
+  }
+
+  /* ── Float cards — horizontal scrollable row stuck at bottom ── */
+  .hero__cards {
+    position: absolute;
+    inset: auto;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    height: 220px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding: 12px 12px 12px 32px;
+    z-index: 6;
+    pointer-events: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: default;
+  }
+  .hero__cards::-webkit-scrollbar { display: none; }
   .hero__float-card {
     display: block !important;
     position: relative !important;
-    width: 170px !important;
-    max-width: 170px !important;
     flex-shrink: 0;
     top: auto !important;
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
     border-radius: 18px;
-    height: 130px;
+    height: 100%;
+    width: 200px !important;
+    max-width: none !important;
+    min-width: unset;
     overflow: hidden;
+    scroll-snap-align: start;
+    cursor: default;
+    transform: none !important;
   }
-  .hero__cards {
-    position: absolute;
-    inset: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 12px 16px;
-    padding-bottom: 16px;
-    z-index: 6;
-    pointer-events: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+  /* Individual card widths */
+  .hero__float-card--1 { width: 220px !important; } /* Available — wider for tags */
+  .hero__float-card--2 { width: 260px !important; } /* Craft — wider for 2-col skills */
+  .hero__float-card--3 { width: 210px !important; } /* Numbers */
+  .hero__float-card--4 { width: 200px !important; } /* Tools */
+  /* Hide stacked bg-card on mobile — depth effect doesn't work in horizontal row */
+  .hfc-status__bg-card,
+  .hfc-stack__bg-card {
+    display: none;
   }
-  .hero__cards::-webkit-scrollbar { display: none; }
 
-  /* Clip float card inner content to fixed height */
+  /* Wraps and fg-cards fill the stretched row height */
   .hfc-status-wrap,
   .hfc-stack-wrap {
-    height: 130px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hfc-status__fg-card,
+  .hfc-stack__fg-card {
+    flex: 1;
+    height: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Craft card — 2-column skill grid to halve the height */
+  .hero__float-card--2 .hfc-craft__skills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 0.5rem;
+    margin-top: 0.1rem;
   }
 
   /* ── About section ── */
@@ -4062,9 +4221,44 @@ img {
   /* ── Footer ── */
   .footer {
     padding: 3rem 1.2rem;
+    text-align: center;
+  }
+  .footer__heading {
+    font-size: clamp(2rem, 9vw, 3rem);
+    letter-spacing: 0;
+  }
+  .footer__subtext {
+    font-size: 0.9rem;
+  }
+  .footer__cta {
+    font-size: 0.88rem;
+    padding: 0.75rem 0.75rem;
+    letter-spacing: 2px;
+    flex: 1;
+    width: auto;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .footer__links {
+    flex-wrap: wrap;
+    gap: 1.2rem;
   }
   .footer__links a {
     font-size: 0.82rem;
+  }
+  .footer__copy {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+  }
+  /* ── Footer game ── */
+  .footer-game__header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .footer-game__meta {
+    gap: 1.5rem;
   }
 }
 
@@ -4118,13 +4312,13 @@ img {
     right: 6px;
     bottom: 6px;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(7, 1fr);
   }
   .hero__grid-pattern .grid-cell__label--lg {
-    font-size: clamp(0.38rem, 1.4vw, 0.55rem);
+    font-size: 14px;
   }
   .hero__grid-pattern .grid-cell__label--md {
-    font-size: clamp(0.28rem, 0.8vw, 0.38rem);
+    font-size: 14px;
   }
   .hero__grid-pattern .grid-cell__label {
     top: 5px;
@@ -4149,6 +4343,12 @@ img {
 
   /* ── Journey ── */
   .journey__block-title {
+    font-size: 0.95rem;
+    color: #111;
+    font-weight: 600;
+  }
+  .journey__block-text {
+    color: #222;
     font-size: 0.95rem;
   }
 
@@ -4568,8 +4768,8 @@ img {
 @media (max-width: 768px) {
   .nh-ticker { opacity: 0.38; }
   .nh-ticker__track { animation-duration: 26.4s; }  /* 10% slower on mobile */
-  .nh-ticker__item { font-size: 10px; letter-spacing: 2px; }
-  .nh-ticker__sep { width: 6px; height: 6px; margin: 0 18px; }
+  .nh-ticker__item { font-size: 16px; letter-spacing: 2px; }
+  .nh-ticker__sep { width: 10px; height: 10px; margin: 0 18px; }
   .nh-content { padding: 48px 24px 64px; }
   .nh-block { width: 100%; }
   .nh-title { font-size: 52px; letter-spacing: -1.5px; margin-bottom: 24px; }

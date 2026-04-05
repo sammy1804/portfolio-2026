@@ -2,6 +2,15 @@
 //  SAMRIDHI PORTFOLIO — Main JS
 // ====================================
 
+// Pretext — text measurement (via esm.sh CDN)
+let pretextPrepare = null, pretextLayout = null;
+if (window.innerWidth < 768) {
+    import('https://esm.sh/@chenglou/pretext').then(mod => {
+        pretextPrepare = mod.prepare;
+        pretextLayout  = mod.layout;
+    }).catch(() => {}); // graceful fallback if CDN unavailable
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initLoader();
     initDock();
@@ -23,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFooterGame();
     initDraggableCards();
     initIdCardDrag();
+    initMobileJourneyReveal();
 });
 
 // ====================================
@@ -297,8 +307,8 @@ function initHeroGrid() {
     // Row 1: TURN IDEAS col2
     [ e(), e(), tT('TURN IDEAS\nINTO\nINTERFACES\nPEOPLE\nACTUALLY\nUSE', 'md'), e(), e(), e(), e(), e(), e() ],
 
-    // Row 2: CLARITY bottom-left col1 | GOOD IS NOT col7
-    [ e(), tB('CLARITY\nIS\nTHE GOAL', 'md'), e(), e(), e(), e(), e(), tT("GOOD IS NOT\nWHERE WE STOP.\nIT'S WHERE\nWE BEGIN.", 'md'), e() ],
+    // Row 2: CLARITY col0 | GOOD IS NOT col3
+    [ tB('CLARITY\nIS\nTHE GOAL', 'md'), e(), e(), tT("GOOD IS NOT\nWHERE WE STOP.\nIT'S WHERE\nWE BEGIN.", 'md'), e(), e(), e(), e(), e() ],
 
     // Row 3: all empty
     [ e(), e(), e(), e(), e(), e(), e(), e(), e() ],
@@ -324,19 +334,30 @@ function initHeroScroll() {
 
     if (!hero || !frame) return;
 
+    let rafPending = false;
     const handleScroll = () => {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(() => {
+            rafPending = false;
+            runScroll();
+        });
+    };
+
+    const runScroll = () => {
         const rect = hero.getBoundingClientRect();
         const scrolled = -rect.top;
         const vh = window.innerHeight;
         const vw = window.innerWidth;
+        const isMobile = vw < 768;
 
-        // Progress: 0 → 1 over 1.5× viewport height
-        const progress = Math.max(0, Math.min(1, scrolled / (vh * 1.5)));
+        // Mobile: complete animation over 1× vh (faster feel); desktop: 1.5×
+        const scrollDist = isMobile ? vh * 1.0 : vh * 1.5;
+        const progress = Math.max(0, Math.min(1, scrolled / scrollDist));
 
         // ── FRAME: shrink to landscape card on mobile, portrait card on desktop ──
-        const isMobile = vw < 768;
         const targetW = isMobile ? Math.min(vw - 40, 360) : Math.min(456, vw * 0.32);
-        const targetH = isMobile ? 220 : 314;
+        const targetH = isMobile ? 450 : 314;
 
         const frameW = vw - progress * (vw - targetW);
         const frameH = vh - progress * (vh - targetH);
@@ -383,9 +404,10 @@ function initHeroScroll() {
 
         // ── 4 FLOATING CARDS ──
         if (isMobile) {
-            // On mobile: static row at bottom, always visible after frame starts shrinking
+            // Show cards only when frame has nearly finished shrinking (progress > 0.85)
+            const cardFade = Math.max(0, Math.min(1, (progress - 0.85) / 0.15));
             floatCards.forEach(card => {
-                card.style.opacity = Math.min(1, progress * 3);
+                card.style.opacity = cardFade;
                 card.style.transform = '';
             });
         } else {
@@ -413,7 +435,7 @@ function initHeroScroll() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    runScroll();
 }
 
 // ====================================
@@ -538,6 +560,60 @@ function initWorkFilters() {
 // ====================================
 //  JOURNEY HOVER CARDS
 // ====================================
+// ====================================
+//  MOBILE JOURNEY REVEAL (pretext-measured, IntersectionObserver-triggered)
+// ====================================
+function initMobileJourneyReveal() {
+    if (window.innerWidth >= 768) return;
+
+    const blocks = document.querySelectorAll('.journey__block');
+    if (!blocks.length) return;
+
+    // Pre-style all blocks as hidden
+    blocks.forEach(block => {
+        block.style.opacity = '0';
+        block.style.transform = 'translateY(28px)';
+        block.style.transition = 'opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1)';
+        block.style.willChange = 'opacity, transform';
+    });
+
+    // Reveal function — optionally uses pretext to ensure text fits before showing
+    function revealBlock(block) {
+        const textEl = block.querySelector('.journey__block-text');
+        const w = block.getBoundingClientRect().width || window.innerWidth - 32;
+
+        const doReveal = () => {
+            block.style.opacity = '1';
+            block.style.transform = 'translateY(0)';
+        };
+
+        if (pretextPrepare && pretextLayout && textEl) {
+            // Measure text — if it overflows the container, expand min-height to fit
+            const text = textEl.innerText || '';
+            const fontSize = parseFloat(getComputedStyle(textEl).fontSize) || 15;
+            const lineHeight = parseFloat(getComputedStyle(textEl).lineHeight) || fontSize * 1.7;
+            const font = `${fontSize}px Open Runde, ui-rounded, sans-serif`;
+            try {
+                const prepared = pretextPrepare(text, font);
+                const { height } = pretextLayout(prepared, w, lineHeight);
+                if (height > 0) textEl.style.minHeight = `${height}px`;
+            } catch (_) {}
+        }
+        doReveal();
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                revealBlock(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    blocks.forEach(block => observer.observe(block));
+}
+
 // ====================================
 //  JOURNEY HOVERS (Wabi.ai Style)
 // ====================================
@@ -994,6 +1070,7 @@ function initIdCardDrag() {
 //  DRAGGABLE FLOAT CARDS
 // ====================================
 function initDraggableCards() {
+    if (window.innerWidth <= 768) return; // horizontal scroll on mobile, no drag
     const cards = document.querySelectorAll('.hero__float-card');
     if (!cards.length) return;
 
@@ -1368,6 +1445,37 @@ function initFooterGame() {
     let pipeSpeed, pipeInterval, pipeTimer;
     let gameActive = false, animId = null, lastTs = 0;
 
+    // ── Audio (Web Audio API — no files needed) ────
+    let audioCtx = null;
+    function getAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+    function beep(freq, type, duration, gain, freqEnd) {
+        try {
+            const ac = getAudio();
+            const play = () => {
+                const osc = ac.createOscillator();
+                const env = ac.createGain();
+                osc.connect(env); env.connect(ac.destination);
+                osc.type = type || 'sine';
+                osc.frequency.setValueAtTime(freq, ac.currentTime);
+                if (freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, ac.currentTime + duration);
+                env.gain.setValueAtTime(gain || 0.18, ac.currentTime);
+                env.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + duration);
+                osc.start(ac.currentTime);
+                osc.stop(ac.currentTime + duration);
+            };
+            if (ac.state === 'suspended') ac.resume().then(play);
+            else play();
+        } catch (_) {}
+    }
+    const sfx = {
+        flap:  () => beep(520, 'square', 0.08, 0.12, 680),
+        score: () => { beep(660, 'sine', 0.1, 0.15, 880); setTimeout(() => beep(880, 'sine', 0.12, 0.12), 80); },
+        die:   () => { beep(320, 'sawtooth', 0.08, 0.2, 160); setTimeout(() => beep(160, 'sawtooth', 0.25, 0.18, 80), 90); },
+    };
+
     // ── Responsive canvas ─────────────────────────
     function resize() {
         canvas.width  = canvas.parentElement.offsetWidth;
@@ -1526,12 +1634,14 @@ function initFooterGame() {
                 p.passed = true;
                 score++;
                 scoreEl.textContent = score;
+                sfx.score();
                 updateSpeed();
             }
         }
 
         // Death check
         if (bird.y + bird.h > canvas.height || bird.y < 0 || pipes.some(p => hits(bird, p))) {
+            sfx.die();
             end(); return;
         }
 
@@ -1580,6 +1690,7 @@ function initFooterGame() {
         if (e) e.preventDefault();
         if (!gameActive) { start(); return; }
         bird.vy = FLAP_V;
+        sfx.flap();
     }
 
     canvas.addEventListener('click', flap);
@@ -1597,6 +1708,32 @@ function initFooterGame() {
     });
 
     drawIdle();
+
+    // ── Mobile: floating trigger opens game as full-screen modal ──
+    const mobileBtn = document.getElementById('fg-mobile-trigger');
+    const closeBtn  = document.getElementById('fg-close-btn');
+    const gameEl    = document.getElementById('footer-game');
+
+    if (mobileBtn && gameEl) {
+        mobileBtn.addEventListener('click', () => {
+            gameEl.classList.add('fg-open');
+            document.body.style.overflow = 'hidden';
+            // Re-measure canvas after modal paint
+            requestAnimationFrame(() => { resize(); if (!gameActive) drawIdle(); });
+        });
+    }
+
+    if (closeBtn && gameEl) {
+        closeBtn.addEventListener('click', () => {
+            gameEl.classList.remove('fg-open');
+            document.body.style.overflow = '';
+            if (gameActive) {
+                gameActive = false;
+                cancelAnimationFrame(animId);
+                animId = null;
+            }
+        });
+    }
 }
 
 // ====================================
@@ -1800,37 +1937,45 @@ function initQuoteSticky() {
     const journey = document.getElementById('journey');
     if (!quote) return;
 
-    let snapped      = false;
-    let hidden       = false;
-    let placeholder  = null;
+    const isMobile = () => window.innerWidth <= 768;
+
+    // Mobile: no sticky — text scrolls normally
+    if (isMobile()) return;
+
+    // ── DESKTOP: FLIP to viewport centre, hide before journey ─────
+    let snapped     = false;
+    let hidden      = false;
+    let placeholder = null;
 
     function snapToCenter() {
         const rect = quote.getBoundingClientRect();
 
-        // Insert same-size placeholder so layout doesn't collapse
+        // Placeholder keeps layout stable
         placeholder = document.createElement('div');
-        placeholder.style.width  = rect.width  + 'px';
-        placeholder.style.height = rect.height + 'px';
+        placeholder.style.width      = rect.width  + 'px';
+        placeholder.style.height     = rect.height + 'px';
         placeholder.style.flexShrink = '0';
         quote.parentNode.insertBefore(placeholder, quote);
 
-        // Lock element visually at its current position
-        quote.style.position = 'fixed';
-        quote.style.top      = rect.top  + 'px';
-        quote.style.left     = rect.left + 'px';
-        quote.style.width    = rect.width + 'px';
-        quote.style.margin   = '0';
-        quote.style.zIndex   = '20';
+        // Fix at EXACT current pixel position — zero visual jump
+        quote.style.position   = 'fixed';
+        quote.style.top        = rect.top  + 'px';
+        quote.style.left       = rect.left + 'px';
+        quote.style.width      = rect.width + 'px';
+        quote.style.margin     = '0';
+        quote.style.zIndex     = '20';
+        quote.style.transform  = 'translate(0, 0)';
         quote.style.transition = 'none';
 
-        // Next two frames: enable transition then move to centre
+        // Delta to viewport centre
+        const dx = window.innerWidth  / 2 - rect.left - rect.width  / 2;
+        const dy = window.innerHeight / 2 - rect.top  - rect.height / 2;
+
+        // Two rAFs: paint fixed-at-current-pos first, then animate
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                quote.style.transition = 'top 0.55s cubic-bezier(0.22,1,0.36,1), left 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1)';
-                quote.style.top       = '50%';
-                quote.style.left      = '50%';
-                quote.style.width     = '';
-                quote.style.transform = 'translate(-50%, -50%)';
+                quote.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+                quote.style.transform  = `translate(${dx}px, ${dy}px)`;
             });
         });
 
@@ -1857,32 +2002,32 @@ function initQuoteSticky() {
     }
 
     function update() {
-        // Hide 300px before journey section enters viewport
+        // Handle runtime resize to mobile
+        if (isMobile()) { if (snapped) unsnap(); return; }
+
+        // Hide before journey section
         if (journey) {
             const jTop = journey.getBoundingClientRect().top;
             if (jTop < window.innerHeight + 300) {
                 if (snapped) hideQuote();
                 return;
             }
-            // Unhide if scrolled back up
             if (hidden) unsnap();
         }
 
-        const rect = quote.getBoundingClientRect();
+        const rect      = snapped ? placeholder.getBoundingClientRect() : quote.getBoundingClientRect();
         const elCenterY = rect.top + rect.height / 2;
         const vpCenterY = window.innerHeight / 2;
 
         if (!snapped && elCenterY <= vpCenterY) {
             snapToCenter();
-        } else if (snapped && !hidden) {
-            // Check placeholder to know if element scrolled back above centre
-            if (placeholder) {
-                const pRect = placeholder.getBoundingClientRect();
-                if (pRect.top + pRect.height / 2 > vpCenterY) unsnap();
-            }
+        } else if (snapped && !hidden && placeholder) {
+            const pRect = placeholder.getBoundingClientRect();
+            if (pRect.top + pRect.height / 2 > vpCenterY) unsnap();
         }
     }
 
     window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', () => { if (isMobile() && snapped) unsnap(); }, { passive: true });
     update();
 }

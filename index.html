@@ -450,60 +450,60 @@
     <div class="journey__hover-glass" id="journey-hover-glass">
       <!-- Architecture Scatter -->
       <img src="./assets/images/arch-icon.png" class="journey__hover-img pos-mid-right img-arch" data-img="architecture"
-        alt="Architecture" />
+        alt="Architecture" loading="lazy" />
 
       <!-- Mobile Classroom Scatter -->
       <img src="./assets/images/mobile-poster-india.png" class="journey__hover-img pos-top-right img-book"
-        data-img="mobile-classroom" alt="India Illiterate Research" />
+        data-img="mobile-classroom" alt="India Illiterate Research" loading="lazy" />
       <img src="./assets/images/mobile-arch-breakdown.png" class="journey__hover-img pos-mid-left img-arch-breakdown"
-        data-img="mobile-classroom" alt="Mobile Classroom Architecture" />
+        data-img="mobile-classroom" alt="Mobile Classroom Architecture" loading="lazy" />
       <img src="./assets/images/mobile-auto-3d.png" class="journey__hover-img pos-bottom-right img-auto-large"
-        data-img="mobile-classroom" alt="Mobile Classroom 3D Render" />
+        data-img="mobile-classroom" alt="Mobile Classroom 3D Render" loading="lazy" />
 
       <!-- Toy Museum Scatter -->
       <img src="./assets/images/toy-museum-int.png" class="journey__hover-img pos-mid-right img-toy-1"
-        data-img="toy-museum" alt="Toy Museum Interior" />
+        data-img="toy-museum" alt="Toy Museum Interior" loading="lazy" />
       <img src="./assets/images/toy-museum-ext.png" class="journey__hover-img pos-bottom-left img-toy-2"
-        data-img="toy-museum" alt="Toy Museum Exterior" />
+        data-img="toy-museum" alt="Toy Museum Exterior" loading="lazy" />
 
       <!-- Shifting Scale -->
       <img src="./assets/images/shifting-scale-bg.png" class="journey__hover-img pos-bg" data-img="shifting-scale"
-        alt="Shifting Scale Architecture Background" />
+        alt="Shifting Scale Architecture Background" loading="lazy" />
 
       <!-- Banjaro Scatter -->
       <img src="./assets/images/banjaro-bg-blur.png" class="journey__hover-img pos-bg-right img-blur" data-img="banjaro"
-        alt="BanjarO Blurred Background" />
+        alt="BanjarO Blurred Background" loading="lazy" />
       <img src="./assets/images/banjaro_app_screen_1.png" class="journey__hover-img pos-mid-left img-mobile-screen"
-        data-img="banjaro" alt="Banjaro Screen" />
+        data-img="banjaro" alt="Banjaro Screen" loading="lazy" />
       <img src="./assets/images/banjaro-hover-1.png" class="journey__hover-img pos-mid-right img-hero"
-        data-img="banjaro" alt="Banjaro App Hero" />
+        data-img="banjaro" alt="Banjaro App Hero" loading="lazy" />
 
       <!-- Intract UI -->
       <img src="./assets/images/intract-card.png" class="journey__hover-img pos-bottom-right img-card"
-        data-img="intract" alt="Intract UI Card" />
+        data-img="intract" alt="Intract UI Card" loading="lazy" />
 
       <img src="./assets/images/placeholder.png" class="journey__hover-img pos-mid-left" data-img="onboarding"
-        alt="Onboarding Flows" />
+        alt="Onboarding Flows" loading="lazy" />
       <img src="./assets/images/placeholder.png" class="journey__hover-img pos-bottom-right" data-img="landing-pages"
-        alt="Interactive Landing Pages" />
+        alt="Interactive Landing Pages" loading="lazy" />
 
       <!-- 10k Scatter (Left small, right big) -->
       <img src="./assets/images/10k-group-bg.png" class="journey__hover-img img-10k-bg" data-img="10k"
-        alt="10k Group Background" />
+        alt="10k Group Background" loading="lazy" />
       <img src="./assets/images/10k-icon.png" class="journey__hover-img pos-bottom-left img-10k-icon" data-img="10k"
-        alt="10k Icon" />
+        alt="10k Icon" loading="lazy" />
       <img src="./assets/images/10k-folder.png" class="journey__hover-img pos-mid-right img-folder animate-folder"
-        data-img="10k" alt="10k Folder" />
+        data-img="10k" alt="10k Folder" loading="lazy" />
 
       <!-- Z42 Labs -->
       <img src="./assets/images/z42-icon.png" class="journey__hover-img pos-mid-left img-app-icon" data-img="z42"
-        alt="Z42 Labs Icon" />
+        alt="Z42 Labs Icon" loading="lazy" />
       <img src="./assets/images/z42-card-website.png" class="journey__hover-img pos-top-right img-z42-fatbox"
-        data-img="z42" alt="Z42 Card Website" />
+        data-img="z42" alt="Z42 Card Website" loading="lazy" />
 
       <!-- Now Portrait -->
       <img src="./assets/images/now-portrait.png" class="journey__hover-img pos-mid-left img-card" data-img="now"
-        alt="Now Portrait" />
+        alt="Now Portrait" loading="lazy" />
     </div>
 
   </section>
@@ -513,9 +513,11 @@
   <!-- ===== FOOTER ===== -->
   <footer class="footer" id="contact">
 
+
     <!-- ===== MINI GAME ===== -->
     <div class="footer-game" id="footer-game">
       <div class="footer-game__header">
+        <button class="fg-close-btn" id="fg-close-btn" aria-label="Close game">✕</button>
         <div>
           <span class="footer-game__tag">/ MINI GAME /</span>
           <h3 class="footer-game__title">Flappy S</h3>
@@ -550,11 +552,11 @@
     <div class="footer__content">
       <h2 class="footer__heading">Let's create<br />something together.</h2>
       <p class="footer__subtext">Available for freelance, full-time, and collaborative projects.</p>
-      <a href="mailto:samridhi28.19@gmail.com" class="footer__cta">CONTACT NOW</a>
-      <div class="footer__links">
-        <a href="https://www.behance.net/samridhi123" target="_blank" rel="noopener">Behance</a>
-        <a href="https://www.linkedin.com/in/samridhi-aggarwal-b540061b6/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:samridhi28.19@gmail.com">Email</a>
+      <div class="footer__cta-row">
+        <button class="fg-mobile-trigger" id="fg-mobile-trigger" aria-label="Play Flappy S">
+          <span class="fg-mobile-trigger__label">Play Flappy S</span>
+        </button>
+        <a href="mailto:samridhi28.19@gmail.com" class="footer__cta">CONTACT NOW</a>
       </div>
       <div class="footer__copy"><span>PORTFOLIO 2025 (DEV PREVIEW)</span><span>Samridhi Aggarwal</span></div>
     </div>
