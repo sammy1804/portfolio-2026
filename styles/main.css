@@ -4305,20 +4305,21 @@ img {
     font-size: 0.5rem;
   }
 
-  /* ── Hero grid — minimal inset, 5 cols ── */
+  /* ── Hero grid — 3 cols × 6 rows on mobile so cells are bigger and text fits ── */
   .hero__grid-pattern {
     top: 6px;
     left: 6px !important;
     right: 6px;
     bottom: 6px;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    overflow: hidden;
   }
   .hero__grid-pattern .grid-cell__label--lg {
-    font-size: 14px;
+    font-size: 13px;
   }
   .hero__grid-pattern .grid-cell__label--md {
-    font-size: 14px;
+    font-size: 12px;
   }
   .hero__grid-pattern .grid-cell__label {
     top: 5px;

@@ -357,7 +357,7 @@ function initHeroScroll() {
 
         // ── FRAME: shrink to landscape card on mobile, portrait card on desktop ──
         const targetW = isMobile ? Math.min(vw - 40, 360) : Math.min(456, vw * 0.32);
-        const targetH = isMobile ? 450 : 314;
+        const targetH = isMobile ? 340 : 314;
 
         const frameW = vw - progress * (vw - targetW);
         const frameH = vh - progress * (vh - targetH);
