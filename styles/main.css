@@ -993,8 +993,8 @@ img {
   border-radius: 24px;
   overflow: hidden;
   clip-path: url(#squircle-clip);
-  opacity: 0;
-  will-change: transform, opacity;
+  opacity: 1;
+  will-change: transform;
   pointer-events: auto;
   transition: box-shadow 0.4s var(--ease-out);
 }

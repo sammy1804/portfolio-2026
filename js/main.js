@@ -402,34 +402,8 @@ function initHeroScroll() {
             heroMeta.style.opacity = Math.max(0, 0.6 - progress * 2);
         }
 
-        // ── 4 FLOATING CARDS ──
-        if (isMobile) {
-            // Show cards only when frame has nearly finished shrinking (progress > 0.85)
-            const cardFade = Math.max(0, Math.min(1, (progress - 0.85) / 0.15));
-            floatCards.forEach(card => {
-                card.style.opacity = cardFade;
-                card.style.transform = '';
-            });
-        } else {
-            // Desktop: slide in from edges after 30% progress
-            const cardStart = 0.3;
-            const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / (1 - cardStart)));
-            floatCards.forEach((card, i) => {
-                const stagger = i * 0.07;
-                const cp = Math.max(0, Math.min(1, (cardProgress - stagger) / (1 - stagger)));
-                const eased = 1 - Math.pow(1 - cp, 3);
-
-                card.style.opacity = eased;
-
-                // Cards fade in from near their resting position — no off-screen travel, no rotation
-                switch (i) {
-                    case 0: card.style.transform = `translateX(${-50 * (1 - eased)}px)`; break;
-                    case 1: card.style.transform = `translateX(${50 * (1 - eased)}px)`; break;
-                    case 2: card.style.transform = `translate(${-50 * (1 - eased)}px, ${30 * (1 - eased)}px)`; break;
-                    case 3: card.style.transform = `translate(${50 * (1 - eased)}px, ${30 * (1 - eased)}px)`; break;
-                }
-            });
-        }
+        // ── 4 FLOATING CARDS — always visible, no scroll animation ──
+        // Cards are static; only dragging moves them
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
