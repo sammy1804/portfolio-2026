@@ -1843,8 +1843,20 @@ function initWorkFloat() {
     const TRAVEL = 1.8;
 
     let rafId = null;
+    let cachedSectionH = section.offsetHeight;
 
     function lerp(a, b, t) { return a + (b - a) * t; }
+
+    /* Cache per-card static values once to avoid per-frame reflows */
+    const cardCache = cards.map(card => ({
+        el:    card,
+        speed: parseFloat(card.dataset.speed || 1),
+        rot:   card.style.getPropertyValue('--wf-rot') || '0deg',
+        initTop: getInitialTop(card),
+    }));
+
+    /* Apply cached top once so it never changes mid-scroll */
+    cardCache.forEach(({ el, initTop }) => { el.style.top = `${initTop}px`; });
 
     const cta = document.getElementById('wf-cta');
 
@@ -1864,21 +1876,16 @@ function initWorkFloat() {
         curMouseY = lerp(curMouseY, mouseY, 0.06);
 
         const progress = getScrollProgress();
-        const sectionH = section.offsetHeight;
 
         /* Overlay reveals driven by scroll */
         updateOverlays(progress);
 
-        /* Cards scrolling upward */
-        cards.forEach(card => {
-            const speed = parseFloat(card.dataset.speed || 1);
-            const rot   = card.style.getPropertyValue('--wf-rot') || '0deg';
-            const initTop = getInitialTop(card);
-            const scrollOffset = progress * TRAVEL * sectionH * speed;
+        /* Cards scrolling upward — use cached values, no layout reads */
+        cardCache.forEach(({ el, speed, rot, initTop }) => {
+            const scrollOffset = progress * TRAVEL * cachedSectionH * speed;
             const mx = curMouseX * MOUSE_STRENGTH * (speed * 0.4);
             const my = curMouseY * MOUSE_STRENGTH * 0.25;
-            card.style.top = `${initTop}px`;
-            card.style.transform = `rotate(${rot}) translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
+            el.style.transform = `rotate(${rot}) translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
         });
 
         rafId = requestAnimationFrame(tick);
@@ -1917,6 +1924,7 @@ function initWorkFloat() {
 
     /* Mobile cleanup on resize */
     window.addEventListener('resize', () => {
+        cachedSectionH = section.offsetHeight;
         if (isMobile()) {
             mouseX = 0; mouseY = 0;
             cards.forEach(c => { c.style.transform = ''; c.style.top = ''; });
