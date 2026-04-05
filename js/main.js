@@ -357,7 +357,10 @@ function initHeroScroll() {
 
         // ── FRAME: shrink to landscape card on mobile, portrait card on desktop ──
         const targetW = isMobile ? Math.min(vw - 40, 360) : Math.min(456, vw * 0.32);
-        const targetH = isMobile ? 340 : 314;
+        // On mobile, cards row is 220px + 12px bottom = 232px from bottom.
+        // Frame center at full progress is vh/2 - 60. Leave 16px gap above cards row.
+        // targetH = vh - 376 (derived), capped at 340 and min 220.
+        const targetH = isMobile ? Math.max(220, Math.min(vh - 376, 340)) : 314;
 
         const frameW = vw - progress * (vw - targetW);
         const frameH = vh - progress * (vh - targetH);
