@@ -414,8 +414,6 @@ function initHeroScroll() {
             // Desktop: slide in from edges after 30% progress
             const cardStart = 0.3;
             const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / (1 - cardStart)));
-            const restTilt = [-3.5, 3, -2.5, 2.5];
-
             floatCards.forEach((card, i) => {
                 const stagger = i * 0.07;
                 const cp = Math.max(0, Math.min(1, (cardProgress - stagger) / (1 - stagger)));
@@ -423,12 +421,12 @@ function initHeroScroll() {
 
                 card.style.opacity = eased;
 
-                // Cards fade in from near their resting position — no off-screen travel
+                // Cards fade in from near their resting position — no off-screen travel, no rotation
                 switch (i) {
-                    case 0: card.style.transform = `translateX(${-50 * (1 - eased)}px) rotate(${restTilt[0] * eased}deg)`; break;
-                    case 1: card.style.transform = `translateX(${50 * (1 - eased)}px) rotate(${restTilt[1] * eased}deg)`; break;
-                    case 2: card.style.transform = `translate(${-50 * (1 - eased)}px, ${30 * (1 - eased)}px) rotate(${restTilt[2] * eased}deg)`; break;
-                    case 3: card.style.transform = `translate(${50 * (1 - eased)}px, ${30 * (1 - eased)}px) rotate(${restTilt[3] * eased}deg)`; break;
+                    case 0: card.style.transform = `translateX(${-50 * (1 - eased)}px)`; break;
+                    case 1: card.style.transform = `translateX(${50 * (1 - eased)}px)`; break;
+                    case 2: card.style.transform = `translate(${-50 * (1 - eased)}px, ${30 * (1 - eased)}px)`; break;
+                    case 3: card.style.transform = `translate(${50 * (1 - eased)}px, ${30 * (1 - eased)}px)`; break;
                 }
             });
         }
