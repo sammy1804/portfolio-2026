@@ -1851,7 +1851,6 @@ function initWorkFloat() {
     const cardCache = cards.map(card => ({
         el:    card,
         speed: parseFloat(card.dataset.speed || 1),
-        rot:   card.style.getPropertyValue('--wf-rot') || '0deg',
         initTop: getInitialTop(card),
     }));
 
@@ -1881,11 +1880,11 @@ function initWorkFloat() {
         updateOverlays(progress);
 
         /* Cards scrolling upward — use cached values, no layout reads */
-        cardCache.forEach(({ el, speed, rot, initTop }) => {
+        cardCache.forEach(({ el, speed, initTop }) => {
             const scrollOffset = progress * TRAVEL * cachedSectionH * speed;
             const mx = curMouseX * MOUSE_STRENGTH * (speed * 0.4);
             const my = curMouseY * MOUSE_STRENGTH * 0.25;
-            el.style.transform = `rotate(${rot}) translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
+            el.style.transform = `translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
         });
 
         rafId = requestAnimationFrame(tick);
