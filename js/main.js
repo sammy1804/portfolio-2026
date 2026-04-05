@@ -402,8 +402,19 @@ function initHeroScroll() {
             heroMeta.style.opacity = Math.max(0, 0.6 - progress * 2);
         }
 
-        // ── 4 FLOATING CARDS — always visible, no scroll animation ──
-        // Cards are static; only dragging moves them
+        // ── 4 FLOATING CARDS — fade in on scroll, no position change ──
+        if (isMobile) {
+            const cardFade = Math.max(0, Math.min(1, (progress - 0.85) / 0.15));
+            floatCards.forEach(card => { card.style.opacity = cardFade; });
+        } else {
+            const cardStart = 0.3;
+            const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / (1 - cardStart)));
+            floatCards.forEach((card, i) => {
+                const stagger = i * 0.07;
+                const cp = Math.max(0, Math.min(1, (cardProgress - stagger) / (1 - stagger)));
+                card.style.opacity = 1 - Math.pow(1 - cp, 3);
+            });
+        }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
