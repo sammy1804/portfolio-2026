@@ -986,6 +986,9 @@ img {
   inset: 0;
   z-index: 4;
   pointer-events: none;
+  --hero-card-cluster-offset: clamp(15rem, 20vw, 19rem);
+  --hero-card-cluster-top: 12%;
+  --hero-card-cluster-bottom: 11%;
 }
 
 .hero__float-card {
@@ -1029,32 +1032,32 @@ img {
 .hero__float-card--1 {
   width: 22%;
   max-width: 240px;
-  top: 12%;
-  left: 24px;
+  top: var(--hero-card-cluster-top);
+  left: max(24px, calc(50% - var(--hero-card-cluster-offset) - 220px));
 }
 
 /* Card 2: Craft — top-right */
 .hero__float-card--2 {
   width: 20%;
   max-width: 220px;
-  top: 12%;
-  right: 24px;
+  top: var(--hero-card-cluster-top);
+  right: max(24px, calc(50% - var(--hero-card-cluster-offset) - 200px));
 }
 
 /* Card 3: Numbers — bottom-right */
 .hero__float-card--3 {
   width: 21%;
   max-width: 232px;
-  bottom: 6%;
-  right: 24px;
+  bottom: var(--hero-card-cluster-bottom);
+  right: max(24px, calc(50% - var(--hero-card-cluster-offset) - 210px));
 }
 
 /* Card 4: Tools — bottom-left */
 .hero__float-card--4 {
   width: 20%;
   max-width: 220px;
-  bottom: 6%;
-  left: 24px;
+  bottom: var(--hero-card-cluster-bottom);
+  left: max(24px, calc(50% - var(--hero-card-cluster-offset) - 205px));
 }
 
 /* ================================ */
@@ -4010,6 +4013,12 @@ img {
     max-width: calc(100vw - 3rem);
   }
 
+  .hero__cards {
+    --hero-card-cluster-offset: clamp(11rem, 17vw, 14rem);
+    --hero-card-cluster-top: 14%;
+    --hero-card-cluster-bottom: 12%;
+  }
+
   /* Bento nav — match dock width naturally */
   .bento-nav__grid {
     grid-template-columns: repeat(3, 1fr);
@@ -4626,6 +4635,250 @@ img {
   .wf-cta { position: static; transform: none; display: flex; justify-content: center; margin-top: 32px; }
 }
 
+
+/* ============================================================
+   PROJECT SHOWCASE  (.pw-*)
+   Pixila-style split layout: image left, text right
+   ============================================================ */
+
+.pw-section {
+  background: var(--bg-dark, #111);
+  padding: 6rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.pw-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 56fr 44fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.pw-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.pw-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pw-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.4);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.pw-counter {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.25);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.pw-preview {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.pw-preview__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pw-preview__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.pw-preview:hover .pw-preview__img {
+  transform: scale(1.03);
+}
+
+.pw-preview__badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(230,48,48,0.92);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.pw-info {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+
+.pw-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  transition: opacity 0.3s ease;
+  line-height: 1.1;
+}
+
+.pw-tag {
+  font-size: 0.72rem;
+  color: var(--red, #e63030);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: 'JetBrains Mono', monospace;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.pw-thumbs {
+  display: flex;
+  gap: 8px;
+}
+
+.pw-thumb {
+  width: 76px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: #1a1a1a;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.pw-thumb.is-active {
+  border-color: var(--red, #e63030);
+  opacity: 1;
+}
+
+.pw-thumb:hover:not(.is-active) {
+  opacity: 0.7;
+}
+
+.pw-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Right panel ── */
+.pw-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+.pw-headline {
+  font-size: clamp(2.4rem, 3.5vw, 4rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.08;
+  margin: 0;
+  letter-spacing: -0.02em;
+  transition: opacity 0.3s ease;
+}
+
+.pw-headline em {
+  color: var(--red, #e63030);
+  font-style: normal;
+}
+
+.pw-desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.75;
+  max-width: 400px;
+  margin: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pw-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  padding: 0.8rem 1.6rem;
+  border-radius: 100px;
+  transition: border-color 0.25s ease, background 0.25s ease, opacity 0.3s ease;
+  align-self: flex-start;
+}
+
+.pw-cta:hover {
+  border-color: var(--red, #e63030);
+  background: rgba(230,48,48,0.08);
+}
+
+.pw-cta__arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.pw-cta:hover .pw-cta__arrow {
+  transform: translateX(5px);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .pw-section {
+    padding: 4rem 1.5rem;
+    min-height: auto;
+    align-items: flex-start;
+  }
+  .pw-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .pw-right {
+    padding-top: 0;
+    gap: 1.5rem;
+  }
+  .pw-headline {
+    font-size: 2rem;
+  }
+  .pw-title {
+    font-size: 1.5rem;
+  }
+  .pw-thumbs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .pw-thumbs::-webkit-scrollbar { display: none; }
+  .pw-desc { max-width: 100%; }
+}
 
 /* ============================================================
    INTRO SECTION  (.nh-*)
