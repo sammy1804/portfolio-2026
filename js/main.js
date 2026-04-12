@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initHobbies();
     initWorkFilters();
     initNhQuoteReveal();   // CDG word reveal on "I design experiences..."
-    initProjectShowcase();
+    initWorkFloat();
     initQuoteSticky();
     initJourneyHovers();
     initScrollReveal();
@@ -1793,163 +1793,129 @@ function initNhQuoteReveal() {
 //  Cards rise upward on scroll.
 //  Text words reveal sequentially like CDG.
 // ====================================
-function initProjectShowcase() {
-    const section = document.querySelector('.pw-section');
-    if (!section) return;
+function initWorkFloat() {
+    const container = document.querySelector('.wf-scroll-container');
+    const section   = document.querySelector('.wf-section');
+    const scene     = document.getElementById('wf-scene');
+    if (!container || !section || !scene) return;
 
-    const projects = [
-        {
-            title: 'Z42 Labs',
-            tag: 'AI · Brand System',
-            image: 'assets/images/project-5.jpg',
-            headline: 'Building a brand\nfor the AI era.',
-            desc: 'Full visual identity and design system for an AI startup — from logo mark to a component library that scales.',
-            url: 'z42.html',
-            external: false,
-        },
-        {
-            title: 'Intract',
-            tag: 'Web3 · Gamification',
-            image: 'assets/images/project-7.jpg',
-            headline: 'Making Web3\nactually fun.',
-            desc: 'Redesigned onboarding and quest flows for Intract\'s Web3 engagement platform — clarity through play.',
-            url: 'intract.html',
-            external: false,
-        },
-        {
-            title: 'Banjaro',
-            tag: 'Product · Travel App',
-            image: 'assets/images/project-4.jpg',
-            headline: 'Adventure,\ndesigned simply.',
-            desc: 'End-to-end product design for a travel discovery and booking app — from research to high-fidelity UI.',
-            url: 'banjaro.html',
-            external: false,
-        },
-        {
-            title: 'Sarvoma',
-            tag: 'Logo · Brand · Identity',
-            image: 'assets/images/project-3.jpg',
-            headline: 'Identity that\nspeaks clearly.',
-            desc: 'Brand identity for a wellness startup — logo system, colour language and type pairing.',
-            url: 'sarvoma.html',
-            external: false,
-            badge: 'COMING SOON',
-        },
-        {
-            title: 'AI Assets',
-            tag: '3D · Motion · Concept',
-            image: 'assets/images/project-2.jpg',
-            headline: 'Generative\naesthetics.',
-            desc: 'Exploring the creative frontier — AI-generated 3D renders, motion concepts and visual experiments.',
-            url: 'ai-assets.html',
-            external: false,
-        },
-        {
-            title: 'Archade',
-            tag: 'Experimental Build',
-            image: 'assets/images/project-1.jpg',
-            headline: 'Where play\nmeets design.',
-            desc: 'An experimental interactive experience built with Google AI Studio — blending game design and UX thinking.',
-            url: 'https://aistudio.google.com/apps/drive/1Xv9MRrVhH7ZQVUxRe6zZnqs9Dia5KXpv?fullscreenApplet=true',
-            external: true,
-        },
-    ];
+    const cards = Array.from(scene.querySelectorAll('.wf-card'));
+    const words = []; // headline removed — no wf-words
+    const isMobile = () => window.innerWidth <= 768;
 
-    let active = 0;
-    const total = projects.length;
-    const pad = n => String(n).padStart(2, '0');
+    /* Mouse parallax — gentle nudge only (separate from scroll) */
+    let mouseX = 0, mouseY = 0;
+    let curMouseX = 0, curMouseY = 0;
+    const MOUSE_STRENGTH = 18; // px max offset in scene-space
 
-    const extAttr = ext => ext ? 'target="_blank" rel="noopener noreferrer"' : '';
-
-    section.innerHTML = `
-      <div class="pw-container">
-        <div class="pw-left">
-          <div class="pw-meta">
-            <span class="pw-label">Selected Work</span>
-            <span class="pw-counter">${pad(1)} / ${pad(total)}</span>
-          </div>
-          <div class="pw-preview">
-            <a class="pw-preview__link" href="${projects[0].url}" ${extAttr(projects[0].external)}>
-              <img class="pw-preview__img" src="${projects[0].image}" alt="${projects[0].title}">
-              ${projects[0].badge ? `<div class="pw-preview__badge">${projects[0].badge}</div>` : ''}
-            </a>
-          </div>
-          <div class="pw-info">
-            <h2 class="pw-title">${projects[0].title}</h2>
-            <span class="pw-tag">${projects[0].tag}</span>
-          </div>
-          <div class="pw-thumbs">
-            ${projects.map((p, i) => `
-              <button class="pw-thumb${i === 0 ? ' is-active' : ''}" data-index="${i}" aria-label="${p.title}">
-                <img src="${p.image}" alt="${p.title}" loading="lazy">
-              </button>`).join('')}
-          </div>
-        </div>
-        <div class="pw-right">
-          <p class="pw-headline">${projects[0].headline.replace('\n', '<br>')}</p>
-          <p class="pw-desc">${projects[0].desc}</p>
-          <a class="pw-cta" href="${projects[0].url}" ${extAttr(projects[0].external)}>
-            View Case Study <span class="pw-cta__arrow">→</span>
-          </a>
-        </div>
-      </div>`;
-
-    const previewLink = section.querySelector('.pw-preview__link');
-    const previewImg  = section.querySelector('.pw-preview__img');
-    const badgeEl     = section.querySelector('.pw-preview__badge');
-    const titleEl     = section.querySelector('.pw-title');
-    const tagEl       = section.querySelector('.pw-tag');
-    const headlineEl  = section.querySelector('.pw-headline');
-    const descEl      = section.querySelector('.pw-desc');
-    const ctaEl       = section.querySelector('.pw-cta');
-    const counterEl   = section.querySelector('.pw-counter');
-    const thumbs      = section.querySelectorAll('.pw-thumb');
-    const fadeEls     = [previewImg, titleEl, tagEl, headlineEl, descEl, ctaEl];
-
-    function switchTo(index) {
-        if (index === active) return;
-        active = index;
-        const p = projects[index];
-
-        fadeEls.forEach(el => { el.style.opacity = '0'; });
-
-        setTimeout(() => {
-            previewImg.src = p.image;
-            previewImg.alt = p.title;
-            previewLink.href = p.url;
-            if (p.external) { previewLink.setAttribute('target', '_blank'); previewLink.setAttribute('rel', 'noopener noreferrer'); }
-            else { previewLink.removeAttribute('target'); previewLink.removeAttribute('rel'); }
-
-            // Badge
-            let badge = section.querySelector('.pw-preview__badge');
-            if (p.badge) {
-                if (!badge) { badge = document.createElement('div'); badge.className = 'pw-preview__badge'; previewLink.appendChild(badge); }
-                badge.textContent = p.badge;
-            } else if (badge) {
-                badge.remove();
-            }
-
-            titleEl.textContent = p.title;
-            tagEl.textContent   = p.tag;
-            headlineEl.innerHTML = p.headline.replace('\n', '<br>');
-            descEl.textContent  = p.desc;
-            ctaEl.href = p.url;
-            if (p.external) { ctaEl.setAttribute('target', '_blank'); ctaEl.setAttribute('rel', 'noopener noreferrer'); }
-            else { ctaEl.removeAttribute('target'); ctaEl.removeAttribute('rel'); }
-
-            counterEl.textContent = `${pad(index + 1)} / ${pad(total)}`;
-            thumbs.forEach((t, i) => t.classList.toggle('is-active', i === index));
-
-            fadeEls.forEach(el => { el.style.opacity = '1'; });
-        }, 280);
+    /* Scroll progress 0 → 1 */
+    function getScrollProgress() {
+        const top = container.getBoundingClientRect().top;
+        const travel = container.offsetHeight - window.innerHeight;
+        return travel > 0 ? Math.max(0, Math.min(1, -top / travel)) : 0;
     }
 
-    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => switchTo(i)));
+    /* Parse CSS percentage or px to a scene-relative value */
+    function getInitialTop(card) {
+        // --wf-y is set as a percentage like "60%"
+        const raw = card.style.getPropertyValue('--wf-y') || '50%';
+        const pct = parseFloat(raw) / 100;
+        // scene inset is 0, but because of 1.5× scale the visual area
+        // is smaller — use section height as reference
+        return pct * section.offsetHeight;
+    }
 
-    // Prevent parent link click when clicking thumbs
-    section.querySelector('.pw-thumbs').addEventListener('click', e => e.stopPropagation());
+    /* Total upward travel — snappy with 220vh container */
+    const TRAVEL = 1.8;
 
+    let rafId = null;
+    let cachedSectionH = section.offsetHeight;
 
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    /* Cache per-card static values once to avoid per-frame reflows */
+    const cardCache = cards.map(card => ({
+        el:    card,
+        speed: parseFloat(card.dataset.speed || 1),
+        initTop: getInitialTop(card),
+    }));
+
+    /* Apply cached top once so it never changes mid-scroll */
+    cardCache.forEach(({ el, initTop }) => { el.style.top = `${initTop}px`; });
+
+    const cta = document.getElementById('wf-cta');
+
+    function updateOverlays(progress) {
+        // CTA fades in at progress 0.55 → 0.75
+        if (cta) {
+            const cOp = Math.max(0, Math.min(1, (progress - 0.55) / 0.20));
+            cta.style.opacity    = cOp.toFixed(3);
+            cta.style.visibility = cOp > 0.01 ? 'visible' : 'hidden';
+        }
+    }
+
+    function tick() {
+        if (isMobile()) { rafId = null; return; }
+
+        curMouseX = lerp(curMouseX, mouseX, 0.06);
+        curMouseY = lerp(curMouseY, mouseY, 0.06);
+
+        const progress = getScrollProgress();
+
+        /* Overlay reveals driven by scroll */
+        updateOverlays(progress);
+
+        /* Cards scrolling upward — use cached values, no layout reads */
+        cardCache.forEach(({ el, speed, initTop }) => {
+            const scrollOffset = progress * TRAVEL * cachedSectionH * speed;
+            const mx = curMouseX * MOUSE_STRENGTH * (speed * 0.4);
+            const my = curMouseY * MOUSE_STRENGTH * 0.25;
+            el.style.transform = `translateY(${-scrollOffset + my}px) translateX(${mx}px)`;
+        });
+
+        rafId = requestAnimationFrame(tick);
+    }
+
+    /* Mouse tracking (normalised –1…+1) */
+    section.addEventListener('mousemove', e => {
+        if (isMobile()) return;
+        const r = section.getBoundingClientRect();
+        mouseX = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+        mouseY = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+    }, { passive: true });
+
+    section.addEventListener('mouseleave', () => { mouseX = 0; mouseY = 0; });
+
+    /* Initialise words to dim state */
+    words.forEach(w => w.style.setProperty('--wf-reveal', '0'));
+
+    /* RAF via IntersectionObserver */
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!rafId) rafId = requestAnimationFrame(tick);
+            } else {
+                if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                if (cta) { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; }
+                if (isMobile()) {
+                    cards.forEach(c => { c.style.transform = ''; c.style.top = ''; });
+                    words.forEach(w => w.style.setProperty('--wf-reveal', '1'));
+                }
+            }
+        });
+    }, { threshold: 0 });
+
+    observer.observe(container);
+
+    /* Mobile cleanup on resize */
+    window.addEventListener('resize', () => {
+        cachedSectionH = section.offsetHeight;
+        if (isMobile()) {
+            mouseX = 0; mouseY = 0;
+            cards.forEach(c => { c.style.transform = ''; c.style.top = ''; });
+            words.forEach(w => w.style.setProperty('--wf-reveal', '1'));
+        }
+    });
 }
 
 
