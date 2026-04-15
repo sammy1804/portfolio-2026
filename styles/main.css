@@ -1215,7 +1215,10 @@ img {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
 }
+.hfc-status__cta:hover { color: rgba(255,255,255,0.8); }
 
 /* Remove the red pulse orb */
 .hfc-status__pulse {
@@ -1257,7 +1260,10 @@ img {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
 }
+.hfc-stack__bg-text:hover { color: rgba(255,255,255,0.8); }
 
 .hfc-stack__fg-card {
   position: relative;
