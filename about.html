@@ -20,11 +20,14 @@
 
   <!-- ===== LOADING SCREEN ===== -->
   <div class="loader" id="loader">
-    <div class="loader__content">
-      <div class="loader__logo">SAMRIDHI</div>
-      <div class="loader__bar">
-        <div class="loader__progress"></div>
+    <span class="loader__letter loader__letter--s" id="loader-s">S</span>
+    <span class="loader__letter loader__letter--a" id="loader-a">A</span>
+    <div class="loader__pill" id="loader-bar">
+      <span class="loader__pill-label">0</span>
+      <div class="loader__pill-track">
+        <div class="loader__bar-fill" id="loader-fill"></div>
       </div>
+      <span class="loader__pill-label">100</span>
     </div>
   </div>
 
@@ -36,7 +39,7 @@
     </div>
     <div class="nav__center" id="nav-logo-link" style="cursor: pointer;">Samridhi aggarwal</div>
     <div class="nav__right">
-      <a href="#">Resume</a>
+      <a href="assets/images/resume.jpg" target="_blank" rel="noopener">Resume</a>
       <a href="mailto:samridhi28.19@gmail.com">Contact</a>
     </div>
     <button class="nav__hamburger" id="nav-hamburger" aria-label="Menu">
