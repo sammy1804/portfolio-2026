@@ -21,7 +21,9 @@ export default defineConfig({
         case_study_template: resolve(__dirname, 'case-study-template.html'),
         promena: resolve(__dirname, 'promena.html'),
         sarvoma: resolve(__dirname, 'sarvoma.html'),
-        upcoming: resolve(__dirname, 'upcoming.html')
+        upcoming: resolve(__dirname, 'upcoming.html'),
+        work: resolve(__dirname, 'work.html'),
+        resume: resolve(__dirname, 'resume.html')
       }
     }
   }
