@@ -81,10 +81,14 @@ function initDock() {
     syncWidth();
     window.addEventListener('resize', syncWidth);
 
-    // Logo scrolls to top
+    // Logo — scroll to top on home, navigate home on other pages
     if (logo) {
         logo.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (document.getElementById('hero')) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.location.href = 'index.html';
+            }
         });
     }
 }

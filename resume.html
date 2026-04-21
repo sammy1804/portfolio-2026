@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Samridhi Aggarwal — Resume</title>
+  <meta name="description"
+    content="Resume of Samridhi Aggarwal — Product Designer, Brand Designer, UI Designer. Experience across Web3, SaaS, B2C and AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400&family=Reenie+Beanie&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+
+  <style>
+    /* =========================================================
+       RESUME PAGE — page-specific styles
+    ========================================================= */
+
+    /* ---- Resume Header ---- */
+    .rv-header {
+      background: var(--bg-dark, #0D0D0D);
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rv-header__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .rv-header__tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: var(--text-muted, #888);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .rv-header__name {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-weight: 700;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      color: #ffffff;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .rv-header__role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted, #888);
+      letter-spacing: 0.08em;
+      margin-bottom: 2.25rem;
+    }
+
+    .rv-header__role span {
+      color: var(--accent-red, #E63226);
+    }
+
+    .rv-header__actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .rv-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--accent-red, #E63226);
+      background: rgba(230,50,38,0.08);
+      border: 1px solid rgba(230,50,38,0.25);
+      border-radius: 100px;
+      padding: 0.6rem 1.4rem;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .rv-download-btn:hover {
+      background: rgba(230,50,38,0.15);
+      border-color: rgba(230,50,38,0.5);
+    }
+
+    .rv-download-btn__icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .rv-header__pills {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .rv-header__pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 0.35rem 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Subtle glow */
+    .rv-header::after {
+      content: '';
+      position: absolute;
+      bottom: -10%;
+      right: 5%;
+      width: 50%;
+      height: 70%;
+      background: radial-gradient(ellipse at bottom right, rgba(230,50,38,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ---- Resume Body ---- */
+    .rv-body {
+      background: var(--bg-cream, #F4F3EC);
+      padding: 5rem 2rem 8rem;
+    }
+
+    .rv-body__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* ---- Shared section styles ---- */
+    .rv-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .rv-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .rv-section__title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      color: var(--accent-red, #E63226);
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .rv-section__title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(0,0,0,0.12);
+    }
+
+    /* ---- Experience items ---- */
+    .rv-exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .rv-exp-item {
+      border-left: 2px solid var(--accent-red, #E63226);
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .rv-exp-item::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-red, #E63226);
+    }
+
+    .rv-exp-item__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .rv-exp-item__company {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-dark, #1a1a1a);
+      letter-spacing: -0.01em;
+    }
+
+    .rv-exp-item__year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: var(--accent-red, #E63226);
+      background: rgba(230,50,38,0.1);
+      border-radius: 100px;
+      padding: 0.25rem 0.7rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .rv-exp-item__role {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 0.6rem;
+    }
+
+    .rv-exp-item__desc {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    /* ---- Education ---- */
+    .rv-edu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .rv-edu-item {
+      border-left: 2px solid rgba(0,0,0,0.15);
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .rv-edu-item::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .rv-edu-item__degree {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-dark, #1a1a1a);
+      margin-bottom: 0.2rem;
+    }
+
+    .rv-edu-item__school {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #777;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    .rv-edu-item__year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent-red, #E63226);
+      background: rgba(230,50,38,0.1);
+      border-radius: 100px;
+      padding: 0.2rem 0.6rem;
+      display: inline-block;
+      margin-top: 0.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- Right column: glass card wrapper ---- */
+    .rv-right-card {
+      background: #141414;
+      border-radius: 24px;
+      padding: 2rem 1.75rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      position: sticky;
+      top: 6rem;
+    }
+
+    .rv-right-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .rv-right-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .rv-right-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      color: var(--accent-red, #E63226);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Skill bars */
+    .rv-skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .rv-skill {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .rv-skill__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rv-skill__name {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .rv-skill__pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted, #888);
+    }
+
+    .rv-skill__bar {
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .rv-skill__fill {
+      height: 100%;
+      background: var(--accent-red, #E63226);
+      border-radius: 100px;
+      transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Tools */
+    .rv-tools-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .rv-tool {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 0.3rem 0.7rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* Interests */
+    .rv-interests-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rv-interest {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .rv-interest::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-red, #E63226);
+      flex-shrink: 0;
+    }
+
+    /* Contact block */
+    .rv-contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .rv-contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.2s ease;
+    }
+
+    .rv-contact-link:hover {
+      color: var(--accent-red, #E63226);
+    }
+
+    .rv-contact-link__icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* Bullet lists inside exp items */
+    .rv-exp-item__list {
+      margin: 0.4rem 0 0;
+      padding-left: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .rv-exp-item__list li {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: #444;
+      list-style-type: disc;
+    }
+
+    .rv-exp-item__list li strong {
+      color: var(--text-dark, #1a1a1a);
+      font-weight: 600;
+    }
+
+    .rv-exp-item__context {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Highlights / Awards */
+    .rv-highlight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .rv-highlight {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(255,255,255,0.12);
+    }
+
+    .rv-highlight__title {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 0.2rem;
+    }
+
+    .rv-highlight__desc {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.55;
+    }
+
+    /* Skills as chips (core skills) */
+    .rv-skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .rv-skill-chip {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 0.3rem 0.75rem;
+    }
+
+    /* Fun projects */
+    .rv-project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .rv-project {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(230,50,38,0.3);
+    }
+
+    .rv-project__name {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 0.25rem;
+    }
+
+    .rv-project__desc {
+      font-family: var(--font-body, 'Open Runde', sans-serif);
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .rv-project__link {
+      color: var(--accent-red, #E63226);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .rv-project__link:hover { text-decoration: underline; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 900px) {
+      .rv-body__inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .rv-right-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .rv-header {
+        padding: 7rem 1.25rem 4rem;
+      }
+
+      .rv-body {
+        padding: 3.5rem 1.25rem 6rem;
+      }
+
+      .rv-header__name {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Squircle clip-path (superellipse) -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <clipPath id="squircle-clip" clipPathUnits="objectBoundingBox">
+        <path d="M 0,0.1 C 0,0.025 0.025,0 0.1,0 L 0.9,0 C 0.975,0 1,0.025 1,0.1 L 1,0.9 C 1,0.975 0.975,1 0.9,1 L 0.1,1 C 0.025,1 0,0.975 0,0.9 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <!-- ===== LOADER ===== -->
+  <div class="loader" id="loader">
+    <span class="loader__letter loader__letter--s" id="loader-s">S</span>
+    <span class="loader__letter loader__letter--a" id="loader-a">A</span>
+    <div class="loader__pill" id="loader-bar">
+      <span class="loader__pill-label">0</span>
+      <div class="loader__pill-track">
+        <div class="loader__bar-fill" id="loader-fill"></div>
+      </div>
+      <span class="loader__pill-label">100</span>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV DOCK ===== -->
+  <nav class="dock" id="dock">
+    <div class="dock__logo" id="dock-logo">S</div>
+    <button class="dock__toggle" id="dock-toggle">
+      <span class="dock__toggle-label">Menu</span>
+      <span class="dock__toggle-icon"><span></span><span></span></span>
+    </button>
+    <button class="dock__chat" onclick="window.openChatbot()">
+      <span class="dock__chat-label">Chat</span>
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2C5.58 2 2 5.13 2 9c0 1.9.82 3.62 2.16 4.9L3 17l3.5-1.4C7.55 16.18 8.74 16.4 10 16.4c4.42 0 8-3.13 8-7.2S14.42 2 10 2z"/></svg>
+    </button>
+    <div class="dock__meta">
+      <span class="dock__meta-time" id="dock-time">--:-- --</span>
+      <span class="dock__meta-loc">Bangalore, IN</span>
+    </div>
+  </nav>
+
+  <!-- ===== BENTO NAV GRID ===== -->
+  <div class="bento-nav" id="bento-nav">
+    <div class="bento-nav__grid">
+      <a href="work.html" class="bento-nav__card bento-nav__card--large" id="nav-work-link">
+        <span class="bento-nav__label">Work</span>
+        <span class="bento-nav__hint">Selected projects</span>
+      </a>
+      <a href="about.html" class="bento-nav__card">
+        <span class="bento-nav__label">About</span>
+        <span class="bento-nav__hint">Who I am</span>
+      </a>
+      <a href="resume.html" class="bento-nav__card">
+        <span class="bento-nav__label">Resume</span>
+        <span class="bento-nav__hint">Experience</span>
+      </a>
+      <a href="mailto:samridhi28.19@gmail.com" class="bento-nav__card bento-nav__card--wide">
+        <span class="bento-nav__label">Contact</span>
+        <span class="bento-nav__hint">Get in touch</span>
+      </a>
+      <a href="https://www.behance.net/samridhi123" target="_blank" rel="noopener" class="bento-nav__card bento-nav__card--icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988H0V5.021h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zM3 11h3.584c2.508 0 2.906-3-.312-3H3v3zm3.391 3H3v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/samridhi-aggarwal-b540061b6/" target="_blank" rel="noopener" class="bento-nav__card bento-nav__card--icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== RESUME HEADER ===== -->
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <p class="rv-header__tag">/ Resume / 2025</p>
+      <h1 class="rv-header__name">Samridhi Aggarwal</h1>
+      <p class="rv-header__role">
+        Product Designer
+        <span>·</span>
+        Brand Designer
+        <span>·</span>
+        UI Designer
+      </p>
+      <div class="rv-header__actions">
+        <a href="assets/images/resume.jpg" target="_blank" rel="noopener" class="rv-download-btn">
+          <span class="rv-download-btn__icon">↓</span>
+          Download Resume
+        </a>
+      </div>
+      <div class="rv-header__pills">
+        <span class="rv-header__pill">Bangalore, IN</span>
+        <span class="rv-header__pill">Available for Work</span>
+        <span class="rv-header__pill">samridhi28.19@gmail.com</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== RESUME BODY ===== -->
+  <main class="rv-body">
+    <div class="rv-body__inner">
+
+      <!-- ===== LEFT COLUMN ===== -->
+      <div class="rv-left">
+
+        <!-- EXPERIENCE -->
+        <div class="rv-section">
+          <h2 class="rv-section__title">Work Experience</h2>
+          <div class="rv-exp-list">
+
+            <div class="rv-exp-item">
+              <div class="rv-exp-item__header">
+                <span class="rv-exp-item__company">Freelancing</span>
+              </div>
+              <ul class="rv-exp-item__list">
+                <li>Currently designing the <strong>Z42 Labs website</strong> from scratch, structuring and visualising the whole thing solo. It's a WIP, but the goal is to make a bold, clean site that clearly tells the story of their <strong>AI products</strong> built for different users.</li>
+              </ul>
+            </div>
+
+            <div class="rv-exp-item">
+              <div class="rv-exp-item__header">
+                <span class="rv-exp-item__company">Promena</span>
+                <span class="rv-exp-item__year">July 2025 – current</span>
+              </div>
+              <p class="rv-exp-item__role">Product designer</p>
+              <ul class="rv-exp-item__list">
+                <li><strong>Redesigning</strong> Promena's website to improve clarity, resulting in a faster navigation flow and stronger service communication.</li>
+                <li>Designed startup website (<strong>B2C SaaS MVP</strong>) from scratch, delivering responsive layouts and cutting page load times through optimised assets and handoff.</li>
+                <li><strong>Managed social media design</strong> for Promena &amp; Zookout, creating campaigns and visuals that increased engagement.</li>
+                <li>Collaborated with founders to define <strong>product storytelling</strong> and align design with business goals.</li>
+              </ul>
+            </div>
+
+            <div class="rv-exp-item">
+              <div class="rv-exp-item__header">
+                <span class="rv-exp-item__company">Intract</span>
+                <span class="rv-exp-item__year">Jan 2025 – June 2025</span>
+              </div>
+              <p class="rv-exp-item__role">UI UX Intern</p>
+              <p class="rv-exp-item__context">Intract is a <strong>Web3-based</strong> engagement platform that gamifies user contributions through quests, rewards, and interactive experiences.</p>
+              <ul class="rv-exp-item__list">
+                <li><strong>Refreshed the brand identity</strong> with a new design system, colours, sticker packs &amp; guidelines, helped unify the look across all touch points and speed up team workflows.</li>
+                <li>Redesigned the <strong>Proof of Humanity interface</strong> (an online privacy first KYC solution) to boost trust and accessibility, led to clearer user journeys and smoother onboarding for 10K+ users.</li>
+                <li>Designed and prototyped the <strong>onboarding flow for platform loyalty program</strong> using Jitter, reduced user drop-off in the first interaction by simplifying the experience.</li>
+                <li>Built modular <strong>UI components and end to end UX flows for AI Agent Product</strong>, made scaling and updates way faster for the team.</li>
+                <li>Developed <strong>interactive landing pages</strong> in Framer &amp; Spline, cut dev handoff time &amp; made the pages more scroll-stopping.</li>
+                <li>Built <strong>AI workflows</strong> to automate designing of visuals as per brand guidelines, saved hours in design grunt work.</li>
+              </ul>
+            </div>
+
+            <div class="rv-exp-item">
+              <div class="rv-exp-item__header">
+                <span class="rv-exp-item__company">Apropos Space</span>
+                <span class="rv-exp-item__year">Sep 2024 – Nov 2024</span>
+              </div>
+              <p class="rv-exp-item__role">Junior Architect</p>
+              <p class="rv-exp-item__context">Apropros is a <strong>small, agile design</strong> studio working on government projects and offering project management support to other firms.</p>
+              <ul class="rv-exp-item__list">
+                <li>Redesigned <strong>NGMA landscape zones</strong> to boost on-site engagement, increasing <strong>user interaction by 40%</strong> through intuitive spatial flow.</li>
+                <li>Delivered <strong>spatial designs</strong> for exhibits and schools, aligning with norms and site implementation goals.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="rv-section">
+          <h2 class="rv-section__title">Education</h2>
+          <div class="rv-edu-list">
+
+            <div class="rv-edu-item">
+              <p class="rv-edu-item__degree">Bachelor of Architecture</p>
+              <p class="rv-edu-item__school">Chandigarh College of Architecture</p>
+              <span class="rv-edu-item__year">2019 – 2024</span>
+            </div>
+
+            <div class="rv-edu-item">
+              <p class="rv-edu-item__degree">UI-UX Bootcamp</p>
+              <p class="rv-edu-item__school">10k Designers — Cohort 11</p>
+              <span class="rv-edu-item__year">2025</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===== RIGHT COLUMN ===== -->
+      <div class="rv-right">
+        <div class="rv-right-card">
+
+          <!-- CORE SKILLS -->
+          <div class="rv-right-section">
+            <h3 class="rv-right-title">Core Skills</h3>
+            <div class="rv-skills-grid">
+              <span class="rv-skill-chip">UI Design</span>
+              <span class="rv-skill-chip">Wireframing</span>
+              <span class="rv-skill-chip">Design Systems</span>
+              <span class="rv-skill-chip">Information Architecture</span>
+              <span class="rv-skill-chip">UX Research</span>
+              <span class="rv-skill-chip">Brand Design</span>
+              <span class="rv-skill-chip">Rapid Prototyping</span>
+              <span class="rv-skill-chip">Design Thinking</span>
+              <span class="rv-skill-chip">Motion Design</span>
+            </div>
+          </div>
+
+          <!-- TOOLS -->
+          <div class="rv-right-section">
+            <h3 class="rv-right-title">Tools</h3>
+            <div class="rv-tools-grid">
+              <span class="rv-tool">Figma</span>
+              <span class="rv-tool">Framer</span>
+              <span class="rv-tool">Photoshop</span>
+              <span class="rv-tool">Illustrator</span>
+              <span class="rv-tool">Jitter</span>
+              <span class="rv-tool">Sketchup</span>
+              <span class="rv-tool">Spline</span>
+              <span class="rv-tool">After Effects</span>
+            </div>
+          </div>
+
+          <!-- HIGHLIGHTS -->
+          <div class="rv-right-section">
+            <h3 class="rv-right-title">Highlights</h3>
+            <div class="rv-highlight-list">
+              <div class="rv-highlight">
+                <p class="rv-highlight__title">Honourable Mention — Ethos | 2022</p>
+                <p class="rv-highlight__desc">Designed an auto school model for students.</p>
+              </div>
+              <div class="rv-highlight">
+                <p class="rv-highlight__title">Thesis — Khilauna, Toy Museum | 2024</p>
+                <p class="rv-highlight__desc">Created an interactive museum celebrating play and childhood.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FUN PROJECTS -->
+          <div class="rv-right-section">
+            <h3 class="rv-right-title">Fun Projects</h3>
+            <div class="rv-project-list">
+              <div class="rv-project">
+                <p class="rv-project__name">Banjaro</p>
+                <p class="rv-project__desc">A self-initiated UX case study merging gamification and social exploration. Used UX research to shape characters, quests, and rewards. <a href="banjaro.html" class="rv-project__link">View →</a></p>
+              </div>
+              <div class="rv-project">
+                <p class="rv-project__name">Cred Flow</p>
+                <p class="rv-project__desc">Revamped B2B user flow and hierarchy with cleaner UI in Figma &amp; Framer. <a href="credflow.html" class="rv-project__link">View →</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTACT -->
+          <div class="rv-right-section">
+            <h3 class="rv-right-title">Contact</h3>
+            <div class="rv-contact-list">
+              <a href="mailto:samridhi28.19@gmail.com" class="rv-contact-link">
+                <span class="rv-contact-link__icon">@</span>
+                samridhi28.19@gmail.com
+              </a>
+<a href="https://www.linkedin.com/in/samridhi-aggarwal-b540061b6/" target="_blank" rel="noopener" class="rv-contact-link">
+                <span class="rv-contact-link__icon">in</span>
+                LinkedIn
+              </a>
+              <a href="https://x.com/Samridhi2819" target="_blank" rel="noopener" class="rv-contact-link">
+                <span class="rv-contact-link__icon">𝕏</span>
+                @Samridhi2819
+              </a>
+              <a href="https://www.behance.net/samridhi123" target="_blank" rel="noopener" class="rv-contact-link">
+                <span class="rv-contact-link__icon">Be</span>
+                Behance
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" id="contact">
+    <div class="footer__content">
+      <h2 class="footer__heading">Let's create<br />something together.</h2>
+      <p class="footer__subtext">Available for freelance, full-time, and collaborative projects.</p>
+      <div class="footer__cta-row" style="display:flex;justify-content:center;gap:1rem;margin-bottom:2rem;">
+        <a href="mailto:samridhi28.19@gmail.com" class="footer__cta">CONTACT NOW</a>
+      </div>
+      <div class="footer__links" style="display:flex;justify-content:center;gap:2rem;margin-bottom:2rem;">
+        <a href="https://www.behance.net/samridhi123" target="_blank" rel="noopener">Behance</a>
+        <a href="https://www.linkedin.com/in/samridhi-aggarwal-b540061b6/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:samridhi28.19@gmail.com">Email</a>
+      </div>
+      <div class="footer__copy"><span>PORTFOLIO 2025 (DEV PREVIEW)</span><span>Samridhi Aggarwal</span></div>
+    </div>
+  </footer>
+
+  <!-- ===== AI CHATBOT MODAL ===== -->
+  <div class="chatbot-overlay" id="chatbot-overlay">
+    <div class="chatbot-modal">
+      <div class="chatbot-header">
+        <div class="chatbot-avatar">S</div>
+        <div class="chatbot-info">
+          <div class="chatbot-name">Sammy</div>
+          <div class="chatbot-status"><span class="chatbot-dot"></span>Online</div>
+        </div>
+        <button class="chatbot-close-btn" onclick="window.closeChatbot()">✕</button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-messages">
+        <div class="chatbot-msg chatbot-msg--bot">
+          Hey! I'm Sammy, Samridhi's AI assistant 👋 Ask me anything — her work, process, or how to collaborate.
+        </div>
+      </div>
+      <div class="chatbot-input-wrap">
+        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Ask me anything..." />
+        <button id="chatbot-send" class="chatbot-send-btn">→</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+
+</body>
+
+</html>
